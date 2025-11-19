@@ -5,7 +5,7 @@ yarn-debug.log*
 yarn-error.log*
 package-lock.json  # Si usas yarn
 yarn.lock         # Si usas npm
-
+resumen.txt
 # Variables de entorno y configuración sensible
 .env
 .env.local

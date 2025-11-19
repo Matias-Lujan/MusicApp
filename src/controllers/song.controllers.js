@@ -1,0 +1,131 @@
+//import { TaskModel } from '../models/task.models.js';
+import { songListResponseDTO, songResponseDTO } from '../dto/songDTO.js';
+import { RepositoryFactory } from '../repository/repositoryFactory.js';
+import { songService } from '../services/song.service.js';
+
+/* const database = new TaskDataBaseRepository('database/tasks.db.json'); */
+const database = RepositoryFactory.getRepository();
+
+export const SongController = {
+  getAll: async (req, res) => {
+    try {
+      const songs = await database.getAll();
+      res.json(songListResponseDTO(songs));
+    } catch (error) {
+      console.log('Error al obtener las canciones', error.message);
+      res.status(500).json({ error: 'error interno del server' });
+    }
+  },
+
+  getById: async (req, res) => {
+    const id = req.params.id;
+    console.log(`ID enviado x parametro -> ${id}`);
+
+    try {
+      const responseData = await database.getById(id);
+      res.json({
+        status: 200,
+        OK: true,
+        message: 'Existe la cancion',
+        playload: songResponseDTO(responseData),
+      });
+    } catch (error) {
+      res.json({
+        status: 400,
+        OK: false,
+        message: `No existe cancion para ID -> ${id}`,
+      });
+      return;
+    }
+  },
+
+  createSong: async (req, res) => {
+    const { titulo, artista } = req.body;
+
+    try {
+      const song = await songService.createSong({ titulo, artista });
+
+      res.json({
+        status: 200,
+        OK: true,
+        message: 'Cancion creada',
+        payload: songResponseDTO(song),
+      });
+      return;
+    } catch (error) {
+      res.json({
+        status: 400,
+        OK: false,
+        message: error.message,
+      });
+      return;
+    }
+  },
+
+  deleteSong: async (req, res) => {
+    const { id } = req.params;
+    console.log(`ID enviado x parametro -> ${id}`);
+
+    try {
+      const data = await database.deleteOne(id);
+
+      res.json({
+        status: 200,
+        OK: true,
+        message: `Cancion ID -> ${id} eliminado de la base de datos`,
+        playload: songResponseDTO(data),
+      });
+    } catch (error) {
+      res.json({
+        status: 400,
+        OK: false,
+        message: error.message,
+      });
+      return;
+    }
+  },
+
+  updateSong: async (req, res) => {
+    const { id } = req.params;
+    const { titulo, artista, album, genero, duracion, portada, fecha_lanzamiento } = req.body;
+
+    try {
+      const song = await database.getById(id);
+
+      if (!song) {
+        return res.status(404).json({
+          status: 404,
+          OK: false,
+          message: 'Canción no encontrada',
+        });
+      }
+
+      const oldDataSong = { ...song };
+
+      const updatedSongData = {
+        titulo: titulo ?? song.titulo,
+        artista: artista ?? song.artista,
+        album: album ?? song.album,
+        genero: genero ?? song.genero,
+        duracion: duracion ?? song.duracion,
+        portada: portada ?? song.portada,
+        fecha_lanzamiento: fecha_lanzamiento ?? song.fecha_lanzamiento,
+      };
+
+      const newDataSong = await database.updateOne(id, updatedSongData);
+
+      return res.status(200).json({
+        status: 200,
+        OK: true,
+        oldDataSong,
+        newDataSong,
+      });
+    } catch (error) {
+      return res.status(400).json({
+        status: 400,
+        OK: false,
+        message: error.message,
+      });
+    }
+  },
+};

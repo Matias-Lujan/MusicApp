@@ -1,0 +1,29 @@
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+const {
+  //MONGO_URI,
+  SUPABASE_URL,
+  SUPABASE_API_KEY,
+  DATABASE,
+  SERVER_PORT,
+  SERVER_HOST,
+  SPOTIFY_CLIENT_ID,
+  SPOTIFY_CLIENT_SECRET,
+  SPOTIFY_API_BASE,
+  SPOTIFY_TOKEN_URL,
+} = process.env;
+
+export const config = {
+  //MONGO_URI,
+  SUPABASE_URL,
+  SUPABASE_API_KEY,
+  DATABASE,
+  SERVER_PORT,
+  SERVER_HOST,
+  SPOTIFY_CLIENT_ID,
+  SPOTIFY_CLIENT_SECRET,
+  SPOTIFY_API_BASE,
+  SPOTIFY_TOKEN_URL,
+};

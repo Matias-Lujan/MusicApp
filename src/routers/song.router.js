@@ -9,5 +9,5 @@ songRouter
   .get('/api/song/:id', getById)
   .delete('/api/song/:id', deleteSong)
   .post('/api/song', createSong)
-  .patch('/api/song/:id',updateSong);
+  .patch('/api/song/:id', updateSong);
 export default songRouter;

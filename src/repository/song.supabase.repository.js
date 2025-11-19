@@ -21,11 +21,11 @@ export default class SongRepositorySupabase {
 
   // Obtener una cancion por ID
   getById = async (id) => {
-    const { data, error } = await this.supabase.from('songs').select('*').eq('id', id).single();
+    const { data, error } = await this.supabase.from('songs').select('*').eq('id', id);//.single();
 
     if (error) throw new Error(error.message);
 
-    return data;
+    return data && data.length > 0 ? data[0] : null;
   };
 
   // Crear una nuevo cancion
@@ -54,12 +54,12 @@ export default class SongRepositorySupabase {
         fecha_lanzamiento,
       })
       .eq('id', id)
-      .select()
-      .single();
+      .select();
+    //.single();
 
     if (error) throw new Error(error.message);
 
-    return data;
+    return data && data.length > 0 ? data[0] : null;
   };
 
   // Eliminar una cancion por ID

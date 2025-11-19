@@ -6,19 +6,19 @@ GET {{host}}/api/songs
 GET {{host}}/api/song/f48689e6-1885-4559-81d6-5fe04e33d6ea
 
 ###
-DELETE {{host}}/api/song/aa9e30e5-6c13-4770-854c-0a55afa28ab4
+DELETE {{host}}/api/song/b8b80404-b68d-4cde-811e-6b88d9fefdd1
 
 ###
 POST {{host}}/api/song
 Content-Type: application/json
 
 {
-    "titulo":"Numb",
-    "artista": "Linkin Park"
+    "titulo":"Smells Like Teen Spirit",
+    "artista": "Nirvana"
 }
 
 ###
-PATCH {{host}}/api/song/aa9dfe58-580c-4c2b-97be-af1bab60169f
+PATCH {{host}}/api/song/21e9de2e-de84-40e2-8a70-81dadb42c32a
 Content-Type: application/json
 
 {
@@ -32,7 +32,7 @@ Content-Type: application/json
 }
 
 ###
-PATCH {{host}}/api/song/aa9dfe58-580c-4c2b-97be-af1bab60169f
+PATCH {{host}}/api/song/21e9de2e-de84-40e2-8a70-81dadb42c32a
 Content-Type: application/json
 
 {

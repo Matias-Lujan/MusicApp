@@ -87,32 +87,9 @@ export const SongController = {
 
   updateSong: async (req, res) => {
     const { id } = req.params;
-    const { titulo, artista, album, genero, duracion, portada, fecha_lanzamiento } = req.body;
 
     try {
-      const song = await database.getById(id);
-
-      if (!song) {
-        return res.status(404).json({
-          status: 404,
-          OK: false,
-          message: 'Canción no encontrada',
-        });
-      }
-
-      const oldDataSong = { ...song };
-
-      const updatedSongData = {
-        titulo: titulo ?? song.titulo,
-        artista: artista ?? song.artista,
-        album: album ?? song.album,
-        genero: genero ?? song.genero,
-        duracion: duracion ?? song.duracion,
-        portada: portada ?? song.portada,
-        fecha_lanzamiento: fecha_lanzamiento ?? song.fecha_lanzamiento,
-      };
-
-      const newDataSong = await database.updateOne(id, updatedSongData);
+      const { oldDataSong, newDataSong } = await songService.updateSongById(id, req.body);
 
       return res.status(200).json({
         status: 200,
@@ -121,8 +98,10 @@ export const SongController = {
         newDataSong,
       });
     } catch (error) {
-      return res.status(400).json({
-        status: 400,
+      const status = error.statusCode || 400;
+
+      return res.status(status).json({
+        status,
         OK: false,
         message: error.message,
       });

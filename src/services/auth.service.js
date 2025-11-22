@@ -24,7 +24,7 @@ export const authService = {
     if (!passwordValidated) {
       throw new Error('Password invalida');
     }
-    
+
     const { password: _password, ...safeUser } = user;
 
     return safeUser;

@@ -13,11 +13,11 @@ POST {{host}}/api/user
 Content-Type: application/json
 
 {
-    "nombre":"Roberto",
-    "apellido":"Perezzzz",
-    "fecha_nacimiento":"1998-12-01",
-    "password":"matias123a",
-    "email": "juan.perezzzAAAAzzzhhhzzzz@example.com"
+    "nombre":"Matias",
+    "apellido":"Lujan",
+    "fecha_nacimiento":"1998-07-14", //año-mes-dia
+    "password":"matiaslujan",
+    "email": "lujan9814@gmail.com"
 }
 
 ###

@@ -3,6 +3,7 @@ import express from 'express';
 import morgan from 'morgan';
 import songRouter from './routers/song.router.js';
 import userRouter from './routers/user.router.js';
+import authRouter from './routers/auth.routers.js';
 
 const server = express();
 const morganFormat = morgan(':method :url :status :res[content-length] - :response-time ms');
@@ -19,6 +20,7 @@ server.get('/', (req, res) => {
 
 server.use(songRouter);
 server.use(userRouter);
+server.use(authRouter);
 
 server.use((req, res, next) => {
   res.status(404).send('No esta disponible este endpoint: ' + req.url);

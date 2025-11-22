@@ -1,0 +1,19 @@
+@host=http://127.0.0.1:3001
+
+### 
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "lujan9814@gmail.com",
+  "password": "matiaslujan"
+}
+
+### 
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "mati@test.com",
+  "password": "prueba"
+}

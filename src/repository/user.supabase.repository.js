@@ -64,7 +64,7 @@ export default class UserRepositorySupabase {
   };
 
   //devuelve el objeto usuario completo (incluyendo password hash) si existe sino un null
-  async findByEmail(email) {
+  async getByEmail(email) {
     const { data, error } = await this.supabase
       .from('users')
       .select('*')
@@ -75,7 +75,6 @@ export default class UserRepositorySupabase {
       throw new Error(error.message);
     }
 
-   
     return data;
   }
 }

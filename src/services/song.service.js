@@ -64,22 +64,22 @@ export const songService = {
   },
 
   async deleteSongById(id) {
-  const song = await database.getById(id);
+    const song = await database.getById(id);
 
-  if (!song) {
-    const error = new Error('Canción no encontrada');
-    error.statusCode = 404;
-    throw error;
-  }
+    if (!song) {
+      const error = new Error('Canción no encontrada');
+      error.statusCode = 404;
+      throw error;
+    }
 
-  const deletedSong = await database.deleteOne(id);
+    const deletedSong = await database.deleteOne(id);
 
-  if (!deletedSong) {
-    const error = new Error('No se pudo eliminar la canción');
-    error.statusCode = 400;
-    throw error;
-  }
+    if (!deletedSong) {
+      const error = new Error('No se pudo eliminar la canción');
+      error.statusCode = 400;
+      throw error;
+    }
 
-  return deletedSong;
-},
+    return deletedSong;
+  },
 };

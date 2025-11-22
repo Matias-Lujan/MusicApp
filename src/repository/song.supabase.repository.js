@@ -71,7 +71,7 @@ export default class SongRepositorySupabase {
       .single();
 
     if (error) throw new Error(error.message);
-    console.log(data)
+    console.log(data);
     return data;
   };
 }

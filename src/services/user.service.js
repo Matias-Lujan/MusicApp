@@ -1,7 +1,12 @@
 //import bcrypt from 'bcrypt';
 import bcrypt from 'bcryptjs';
 import { RepositoryFactory } from '../repository/repositoryFactory.js';
-import { isNonEmptyString, isValidEmail, normalizeEmail, isValidBirthDate } from '../utils/validations.utils.js';
+import {
+  isNonEmptyString,
+  isValidEmail,
+  normalizeEmail,
+  isValidBirthDate,
+} from '../utils/validations.utils.js';
 
 const database = RepositoryFactory.getUserRepository();
 
@@ -9,28 +14,27 @@ function validateUserPayload(
   { nombre, apellido, email, fecha_nacimiento, password },
   { isUpdate = false } = {},
 ) {
-
   if (!isUpdate || nombre !== undefined) {
     if (!isNonEmptyString(nombre)) {
-      throw new Error ('El nombre es obligatorio y no puede estar vacío');
+      throw new Error('El nombre es obligatorio y no puede estar vacío');
     }
   }
 
   if (!isUpdate || apellido !== undefined) {
     if (!isNonEmptyString(apellido)) {
-      throw new Error ('El apellido es obligatorio y no puede estar vacío');
+      throw new Error('El apellido es obligatorio y no puede estar vacío');
     }
   }
 
   if (!isUpdate || email !== undefined) {
     if (!isValidEmail(email)) {
-      throw new Error ('El email es obligatorio y debe tener un formato válido');
+      throw new Error('El email es obligatorio y debe tener un formato válido');
     }
   }
 
   if (!isUpdate || fecha_nacimiento !== undefined) {
     if (!isValidBirthDate(fecha_nacimiento)) {
-      throw new Error (
+      throw new Error(
         'La fecha de nacimiento es obligatoria y debe ser igual o mayor a al menos 18 años',
       );
     }
@@ -39,15 +43,13 @@ function validateUserPayload(
   // password
   if (!isUpdate || password !== undefined) {
     if (!isNonEmptyString(password)) {
-      throw new Error ('La contraseña es obligatoria y no puede estar vacía');
+      throw new Error('La contraseña es obligatoria y no puede estar vacía');
     } else if (password.length < 8) {
-      throw new Error ('La contraseña debe tener al menos 8 caracteres');
+      throw new Error('La contraseña debe tener al menos 8 caracteres');
     } else if (password.length > 50) {
-      throw new Error ('La contraseña no puede superar los 50 caracteres');
+      throw new Error('La contraseña no puede superar los 50 caracteres');
     }
   }
-
-
 }
 
 export const userService = {
@@ -160,22 +162,22 @@ export const userService = {
   },
 
   async deleteUserById(id) {
-  const user = await database.getById(id);
+    const user = await database.getById(id);
 
-  if (!user) {
-    const error = new Error('Usuario no encontrado');
-    error.statusCode = 404;
-    throw error;
-  }
+    if (!user) {
+      const error = new Error('Usuario no encontrado');
+      error.statusCode = 404;
+      throw error;
+    }
 
-  const deletedUser = await database.deleteOne(id);
+    const deletedUser = await database.deleteOne(id);
 
-  if (!deletedUser) {
-    const error = new Error('No se pudo eliminar el usuario');
-    error.statusCode = 400;
-    throw error;
-  }
+    if (!deletedUser) {
+      const error = new Error('No se pudo eliminar el usuario');
+      error.statusCode = 400;
+      throw error;
+    }
 
-  return deletedUser;
-},
+    return deletedUser;
+  },
 };

@@ -1,6 +1,6 @@
 import DatabaseFactory from '../databases/DatabaseFactory.js';
 
-export default class SongRepositorySupabase {
+export default class UserRepositorySupabase {
   constructor() {
     this.init();
   }
@@ -9,69 +9,57 @@ export default class SongRepositorySupabase {
     this.supabase = await DatabaseFactory.getConnection();
   }
 
-  // Obtener todas las canciones
+  // Obtener todos los usuarios
   async getAll() {
-    const { data, error } = await this.supabase.from('songs').select('*');
+    const { data, error } = await this.supabase.from('users').select('*');
 
     if (error) throw new Error(error.message);
 
     return data;
   }
 
-  // Obtener una cancion por ID
+  // Obtener un usuario por ID
   getById = async (id) => {
-    const { data, error } = await this.supabase.from('songs').select('*').eq('id', id); //.single();
+    const { data, error } = await this.supabase.from('users').select('*').eq('id', id);
 
     if (error) throw new Error(error.message);
 
     return data && data.length > 0 ? data[0] : null;
   };
 
-  // Crear una nuevo cancion
-  createOne = async (songData) => {
-    const { data, error } = await this.supabase.from('songs').insert([songData]).select().single();
+  // Crear un nuevo usuario
+  createOne = async (userData) => {
+    const { data, error } = await this.supabase.from('users').insert([userData]).select().single();
 
     if (error) throw new Error(error.message);
 
     return data;
   };
 
-  // Actualizar una cancion por ID
-  updateOne = async (
-    id,
-    { titulo, artista, album, genero, duracion, portada, fecha_lanzamiento },
-  ) => {
+  // Actualizar un usuario por ID
+  updateOne = async (id, updatedFields) => {
     const { data, error } = await this.supabase
-      .from('songs')
-      .update({
-        titulo,
-        artista,
-        album,
-        genero,
-        duracion,
-        portada,
-        fecha_lanzamiento,
-      })
+      .from('users')
+      .update(updatedFields)
       .eq('id', id)
       .select();
-    //.single();
 
     if (error) throw new Error(error.message);
 
     return data && data.length > 0 ? data[0] : null;
   };
 
-  // Eliminar una cancion por ID
+  // Eliminar un usuario por ID
   deleteOne = async (id) => {
     const { data, error } = await this.supabase
-      .from('songs')
+      .from('users')
       .delete()
       .eq('id', id)
       .select()
       .single();
 
     if (error) throw new Error(error.message);
-    console.log(data)
+
     return data;
   };
 }

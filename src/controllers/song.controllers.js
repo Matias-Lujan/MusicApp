@@ -1,10 +1,8 @@
-//import { TaskModel } from '../models/task.models.js';
 import { songListResponseDTO, songResponseDTO } from '../dto/songDTO.js';
 import { RepositoryFactory } from '../repository/repositoryFactory.js';
 import { songService } from '../services/song.service.js';
 
-/* const database = new TaskDataBaseRepository('database/tasks.db.json'); */
-const database = RepositoryFactory.getRepository();
+const database = RepositoryFactory.getSongRepository();
 
 export const SongController = {
   getAll: async (req, res) => {
@@ -67,7 +65,7 @@ export const SongController = {
     console.log(`ID enviado x parametro -> ${id}`);
 
     try {
-      const data = await database.deleteOne(id);
+      const data = await await songService.deleteSongById(id);
 
       res.json({
         status: 200,

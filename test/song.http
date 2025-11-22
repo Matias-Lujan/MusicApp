@@ -6,15 +6,15 @@ GET {{host}}/api/songs
 GET {{host}}/api/song/f48689e6-1885-4559-81d6-5fe04e33d6ea
 
 ###
-DELETE {{host}}/api/song/b8b80404-b68d-4cde-811e-6b88d9fefdd1
+DELETE {{host}}/api/song/21e9de2e-de84-40e2-8a70-81dadb42c32a
 
 ###
 POST {{host}}/api/song
 Content-Type: application/json
 
 {
-    "titulo":"Smells Like Teen Spirit",
-    "artista": "Nirvana"
+    "titulo":"Como te voy a olvidar",
+    "artista": "Los angeles azules"
 }
 
 ###

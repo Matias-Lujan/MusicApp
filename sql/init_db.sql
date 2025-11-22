@@ -10,51 +10,19 @@ create table public.songs (
   created_at       timestamp with time zone default now()
 );
 
--- 1) Canción con todos los campos mínimos
-insert into songs (titulo, artista, genero, duracion)
-values (
-  'Numb',
-  'Linkin Park',
-  '{Rock, Alternative}',
-  185
+create table public.users (
+  id               uuid primary key default gen_random_uuid(),
+  nombre           text not null,
+  apellido         text not null,
+  email            text not null unique,
+  fecha_nacimiento date not null,
+  password         text not null, -- hash bcrypt
+  created_at       timestamp with time zone default now()
 );
 
--- 2) Canción con portada personalizada pero album por defecto
-insert into songs (titulo, artista, genero, duracion, portada)
-values (
-  'Blinding Lights',
-  'The Weeknd',
-  '{Pop, Synthwave}',
-  200,
-  'https://example.com/blinding-lights.jpg'
-);
-
--- 3) Canción con descripción personalizada
-insert into songs (titulo, artista, genero, duracion, descripcion)
-values (
-  'Shape of You',
-  'Ed Sheeran',
-  '{Pop}',
-  234,
-  'Uno de los éxitos más grandes de 2017'
-);
-
--- 4) Canción con letra incluida (resto por defecto)
-insert into songs (titulo, artista, genero, duracion, letra)
-values (
-  'Bohemian Rhapsody',
-  'Queen',
-  '{Rock}',
-  354,
-  'Is this the real life? Is this just fantasy?...'
-);
-
--- 5) Canción completando 2 o 3 campos pero dejando defaults
-insert into songs (titulo, artista, genero, duracion, album)
-values (
-  'HUMBLE.',
-  'Kendrick Lamar',
-  '{Hip-Hop}',
-  177,
-  'DAMN.'
+create table public.playback_log (
+  id              uuid primary key default gen_random_uuid(),
+  user_id         uuid not null references public.users(id) on delete cascade,
+  song_id         uuid not null references public.songs(id) on delete cascade,
+  played_at       timestamp with time zone default now() not null
 );

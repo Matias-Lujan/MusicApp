@@ -1,0 +1,30 @@
+@host=http://127.0.0.1:3001
+
+GET {{host}}/api/users
+
+###
+GET {{host}}/api/user/4960a99a-fe12-4fb2-8008-8aab56dc161c
+
+###
+DELETE {{host}}/api/user/a3700d25-300f-498d-b558-e4f89bb3f038
+
+###
+POST {{host}}/api/user
+Content-Type: application/json
+
+{
+    "nombre":"Roberto",
+    "apellido":"Perezzzz",
+    "fecha_nacimiento":"1998-12-01",
+    "password":"matias123a",
+    "email": "juan.perezzzAAAAzzzhhhzzzz@example.com"
+}
+
+###
+PATCH {{host}}/api/user/7d51476a-6f13-4ba8-80d7-9334dfcf9e64
+Content-Type: application/json
+
+{
+  "nombre": "Juan P. Updated",
+  "email": "updated@example.com"
+}

@@ -10,8 +10,9 @@ export default class DatabaseFactory {
   static createConnection(databaseType) {
     switch (databaseType?.toLowerCase()) {
       case 'mongoose':
-        const mongo = new MongooseConnection();
-        DatabaseFactory.connectMongo(mongo);
+        /* const mongo = new MongooseConnection();
+        DatabaseFactory.connectMongo(mongo); */
+        throw new Error('Conexion MongoDB no implementada todavía');
 
       case 'supabase':
         return SupaBaseConnection.connect();

@@ -1,7 +1,7 @@
 import { RepositoryFactory } from '../repository/repositoryFactory.js';
 import { fetchDataSpotify } from './external/spotify.service.js';
 
-const database = RepositoryFactory.getRepository();
+const database = RepositoryFactory.getSongRepository();
 
 function cleanObject(obj) {
   return Object.fromEntries(Object.entries(obj).filter(([, value]) => value !== undefined));
@@ -62,4 +62,24 @@ export const songService = {
 
     return { oldDataSong, newDataSong };
   },
+
+  async deleteSongById(id) {
+  const song = await database.getById(id);
+
+  if (!song) {
+    const error = new Error('Canción no encontrada');
+    error.statusCode = 404;
+    throw error;
+  }
+
+  const deletedSong = await database.deleteOne(id);
+
+  if (!deletedSong) {
+    const error = new Error('No se pudo eliminar la canción');
+    error.statusCode = 400;
+    throw error;
+  }
+
+  return deletedSong;
+},
 };

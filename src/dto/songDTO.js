@@ -10,12 +10,10 @@ export const songResponseDTO = (song) => {
     titulo: toTitleCase(song.titulo),
     artista: toTitleCase(song.artista),
     album: toTitleCase(song.album),
-    genero: toTitleCase(song.genero), // array
+    genero: toTitleCase(song.genero),
     duracion: formatDuration(song.duracion),
     fechaLanzamiento: song.fecha_lanzamiento,
     portada: song.portada,
-    //descripcion: song.descripcion,
-    //letra: song.letra,
     //created_at: song.created_at,
   };
 };

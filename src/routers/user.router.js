@@ -5,9 +5,9 @@ const userRouter = express.Router();
 const { getAll, getById, deleteUser, createUser, updateUser } = UserController;
 
 userRouter
-  .get('/api/users', getAll)
-  .get('/api/user/:id', getById)
-  .delete('/api/user/:id', deleteUser)
-  .post('/api/user', createUser)
-  .patch('/api/user/:id', updateUser);
+  .get('/users', getAll)
+  .get('/:id', getById)
+  .delete('/:id', deleteUser)
+  .post('/create', createUser)
+  .patch('/:id', updateUser);
 export default userRouter;

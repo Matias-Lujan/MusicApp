@@ -19,9 +19,9 @@ server.get('/', (req, res) => {
   });
 });
 
-server.use(songRouter);
-server.use(userRouter);
-server.use(authRouter);
+server.use('/api/song',songRouter);
+server.use('/api/user',userRouter);
+server.use('/api/auth',authRouter);
 
 /* server.use((req, res, next) => {
   res.status(404).send('No esta disponible este endpoint: ' + req.url);

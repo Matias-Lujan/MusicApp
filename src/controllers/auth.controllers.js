@@ -6,12 +6,14 @@ export const AuthController = {
     const { email, password } = req.body;
 
     try {
-      const data = await authService.loginUser({ email, password });
+      const { user, token } = await authService.loginUser({ email, password });
 
       res.json({
         status: 200,
         OK: true,
-        payload: userResponseDTO(data),
+        token,
+        payload: userResponseDTO(user),
+        message: 'Login exitoso',
       });
     } catch (error) {
       res.json({

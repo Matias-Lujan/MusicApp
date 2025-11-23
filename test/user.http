@@ -9,7 +9,7 @@ GET {{host}}/api/user/4960a99a-fe12-4fb2-8008-8aab56dc161c
 DELETE {{host}}/api/user/a3700d25-300f-498d-b558-e4f89bb3f038
 
 ###
-POST {{host}}/api/user
+POST {{host}}/api/user/create
 Content-Type: application/json
 
 {

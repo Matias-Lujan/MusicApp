@@ -1,13 +1,17 @@
 import express from 'express';
 import { SongController } from '../controllers/song.controllers.js';
+import { authMiddleware } from '../middleware/auth.middleware.js';
 
 const songRouter = express.Router();
 const { getAll, getById, deleteSong, createSong, updateSong } = SongController;
 
+
+songRouter.use(authMiddleware);
+
 songRouter
-  .get('/api/songs', getAll)
-  .get('/api/song/:id', getById)
-  .delete('/api/song/:id', deleteSong)
-  .post('/api/song', createSong)
-  .patch('/api/song/:id', updateSong);
+  .get('/songs', getAll)
+  .get('/:id', getById)
+  .delete('/:id', deleteSong)
+  .post('/create', createSong)
+  .patch('/:id', updateSong);
 export default songRouter;

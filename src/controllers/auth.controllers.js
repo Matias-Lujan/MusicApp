@@ -1,7 +1,6 @@
 import { userResponseDTO } from '../dto/userDTO.js';
 import { authService } from '../services/auth.service.js';
 
-
 export const AuthController = {
   login: async (req, res) => {
     const { email, password } = req.body;

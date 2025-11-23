@@ -1,12 +1,26 @@
 @host=http://127.0.0.1:3001
+@jwt_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoiYzUyY2IzZTktODljNC00YWVlLWJmM2QtZjMxM2QwMjMzN2E1IiwiZW1haWwiOiJ1c2VyQGdtYWlsLmNvbSIsIm5vbWJyZSI6Ik1hdGlhcyIsImFwZWxsaWRvIjoiTHVqYW4iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NjM5MzI3NTksImV4cCI6MTc2NDAxOTE1OX0.3sbSYY1DPx1yyk7IKzIZnCQFArVWRsFhZfI6PKzMBQg
 
-GET {{host}}/api/users
+GET {{host}}/api/user/users
+Authorization: Bearer {{jwt_token}}
 
 ###
-GET {{host}}/api/user/4960a99a-fe12-4fb2-8008-8aab56dc161c
+GET {{host}}/api/user/ac05de4c-67b1-4b21-8ea3-e9040f65546a
+Authorization: Bearer {{jwt_token}}
 
 ###
-DELETE {{host}}/api/user/a3700d25-300f-498d-b558-e4f89bb3f038
+DELETE {{host}}/api/user/ac05de4c-67b1-4b21-8ea3-e9040f65546a
+Authorization: Bearer {{jwt_token}}
+
+###
+PATCH {{host}}/api/user/ac05de4c-67b1-4b21-8ea3-e9040f65546a
+Authorization: Bearer {{jwt_token}}
+Content-Type: application/json
+
+{
+  "nombre": "borrar",
+  "email": "UPDATEDdddd@example.com"
+}
 
 ###
 POST {{host}}/api/user/create
@@ -15,16 +29,16 @@ Content-Type: application/json
 {
     "nombre":"Matias",
     "apellido":"Lujan",
-    "fecha_nacimiento":"1998-07-14", //año-mes-dia
+    "fecha_nacimiento":"1998-07-14",
     "password":"matiaslujan",
-    "email": "lujan9814@gmail.com"
+    "email": "user@gmail.com"
 }
 
 ###
-PATCH {{host}}/api/user/7d51476a-6f13-4ba8-80d7-9334dfcf9e64
+PATCH {{host}}/api/user/c52cb3e9-89c4-4aee-bf3d-f313d02337a5
+Authorization: Bearer {{jwt_token}}
 Content-Type: application/json
 
 {
-  "nombre": "Juan P. Updated",
-  "email": "updated@example.com"
+  "role": "ADMIN"
 }

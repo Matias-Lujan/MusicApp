@@ -1,47 +1,39 @@
 @host=http://127.0.0.1:3001
-@jwt_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoiOWQ0Y2U1Y2QtNjBiZi00M2NlLTk0NTAtYzQyZWY3N2RlMjUwIiwiZW1haWwiOiJsdWphbjk4MTRAZ21haWwuY29tIiwibm9tYnJlIjoiTWF0aWFzIiwiYXBlbGxpZG8iOiJMdWphbiIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzYzOTI0MDQ1LCJleHAiOjE3NjQwMTA0NDV9.cD_qIgP6Q8SQCyTlhDU-FG1fUWATdpB4tst0945dwsA
+@jwt_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoiYzUyY2IzZTktODljNC00YWVlLWJmM2QtZjMxM2QwMjMzN2E1IiwiZW1haWwiOiJ1c2VyQGdtYWlsLmNvbSIsIm5vbWJyZSI6Ik1hdGlhcyIsImFwZWxsaWRvIjoiTHVqYW4iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NjM5MzI3NTksImV4cCI6MTc2NDAxOTE1OX0.3sbSYY1DPx1yyk7IKzIZnCQFArVWRsFhZfI6PKzMBQg
 
-GET {{host}}/api/song/songs
-
-###
-GET {{host}}/api/song/f48689e6-1885-4559-81d6-5fe04e33d6ea
-
-###
-DELETE {{host}}/api/song/21e9de2e-de84-40e2-8a70-81dadb42c32a
-
-###
-POST {{host}}/api/song
-Content-Type: application/json
-
-{
-    "titulo":"Como te voy a olvidar",
-    "artista": "Los angeles azules"
-}
-
-###
-PATCH {{host}}/api/song/21e9de2e-de84-40e2-8a70-81dadb42c32a
-Content-Type: application/json
-
-{
-  "titulo": "Sabado a la noche",
-  "artista": "Juana la loca",
-  "album": "Ni idea pa",
-  "genero": ["Rock Argentino"],
-  "duracion": 200,
-  "portada": "https://i.scdn.co/image/juana-la-loca",
-  "fecha_lanzamiento": "2006-03-25"
-}
-
-###
-PATCH {{host}}/api/song/21e9de2e-de84-40e2-8a70-81dadb42c32a
-Content-Type: application/json
-
-{
-  "album": "Meteora (Deluxe Edition)",
-  "portada": "https://i.scdn.co/image/AAAAAAAAAAAAAAAAAA"
-}
 
 ###
 GET {{host}}/api/song/songs
+Authorization: Bearer {{jwt_token}}
+Content-Type: application/json
+
+###
+GET {{host}}/api/song/b92e15ee-1b98-415a-9ba1-af16ec98a380
+Authorization: Bearer {{jwt_token}}
+Content-Type: application/json
+
+
+###
+POST {{host}}/api/song/create
+Authorization: Bearer {{jwt_token}}
+Content-Type: application/json
+
+{
+    "titulo":"shape of you",
+    "artista": "ed sheeran"
+}
+
+###
+PATCH {{host}}/api/song/b92e15ee-1b98-415a-9ba1-af16ec98a380
+Authorization: Bearer {{jwt_token}}
+Content-Type: application/json
+
+{
+  "album": "TEST",
+  "portada": "TEST"
+}
+
+###
+DELETE {{host}}/api/song/b92e15ee-1b98-415a-9ba1-af16ec98a380
 Authorization: Bearer {{jwt_token}}
 Content-Type: application/json

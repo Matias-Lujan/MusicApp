@@ -44,7 +44,6 @@ export const UserController = {
   createUser: async (req, res) => {
     try {
       const user = await userService.createUser(req.body);
-
       return res.json({
         status: 200,
         OK: true,

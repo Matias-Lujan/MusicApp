@@ -72,7 +72,6 @@ export const userService = {
       password: passwordHash,
       role: 'USER',
     };
-
     let userCreated;
     try {
       userCreated = await database.createOne(user);
@@ -131,6 +130,18 @@ export const userService = {
       dataToUpdate.password = passwordHash;
     }
 
+    if (payload.role !== undefined) {
+      const role = String(payload.role).toUpperCase().trim();
+
+      if (!['ADMIN', 'USER'].includes(role)) {
+        const error = new Error('Rol invalido. Los roles validos son ADMIN o USER');
+        error.statusCode = 400;
+        throw error;
+      }
+
+      dataToUpdate.role = role;
+    }
+
     if (Object.keys(dataToUpdate).length === 0) {
       const error = new Error('No se enviaron campos para actualizar');
       error.statusCode = 400;
@@ -142,7 +153,9 @@ export const userService = {
       newDataUser = await database.updateOne(id, dataToUpdate);
     } catch (error) {
       if (error.message && error.message.includes('duplicate key value')) {
-        const err = new Error('Ya existe un usuario registrado con ese email');
+        const err = new Error(
+          'No se puede actualizar el email porque ya existe un usuario registrado con ese email',
+        );
         err.statusCode = 409;
         throw err;
       }

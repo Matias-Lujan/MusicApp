@@ -8,6 +8,7 @@ export const userResponseDTO = (user) => {
     nombre: toTitleCase(user.nombre),
     apellido: toTitleCase(user.apellido),
     email: user.email,
+    role: user.role,
   };
 };
 

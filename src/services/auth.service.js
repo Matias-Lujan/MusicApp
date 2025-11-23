@@ -12,7 +12,7 @@ function generateAccesToken(user) {
     email: user.email,
     nombre: user.nombre,
     apellido: user.apellido,
-    //pendiente rol
+    role: user.role,
   };
 
   return jwt.sign(payload, config.JWT_SECRET_KEY, {
@@ -26,7 +26,7 @@ export const authService = {
       throw new Error('El email y la contraseña son obligatorios');
     }
     const normalizedEmail = normalizeEmail(email);
-    
+
     if (!isValidEmail(normalizedEmail)) {
       throw new Error('El email debe tener un formato valido');
     }
@@ -42,7 +42,7 @@ export const authService = {
     }
 
     const { password: _password, ...safeUser } = user;
-    
+
     const token = generateAccesToken(safeUser);
 
     return {

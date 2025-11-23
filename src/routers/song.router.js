@@ -5,7 +5,6 @@ import { authMiddleware } from '../middleware/auth.middleware.js';
 const songRouter = express.Router();
 const { getAll, getById, deleteSong, createSong, updateSong } = SongController;
 
-
 songRouter.use(authMiddleware);
 
 songRouter

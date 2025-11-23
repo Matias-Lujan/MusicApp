@@ -70,6 +70,7 @@ export const userService = {
       email,
       fecha_nacimiento,
       password: passwordHash,
+      role: 'USER',
     };
 
     let userCreated;

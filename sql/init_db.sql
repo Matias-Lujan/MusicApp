@@ -16,7 +16,8 @@ create table public.users (
   apellido         text not null,
   email            text not null unique,
   fecha_nacimiento date not null,
-  password         text not null, -- hash bcrypt
+  password         text not null, -- hash bcrypt,
+  role             text not null default 'USER',
   created_at       timestamp with time zone default now()
 );
 

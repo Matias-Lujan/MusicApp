@@ -1,5 +1,5 @@
 @host=http://127.0.0.1:3001
-@jwt_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoiYzUyY2IzZTktODljNC00YWVlLWJmM2QtZjMxM2QwMjMzN2E1IiwiZW1haWwiOiJ1c2VyQGdtYWlsLmNvbSIsIm5vbWJyZSI6Ik1hdGlhcyIsImFwZWxsaWRvIjoiTHVqYW4iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NjM5MzI3NTksImV4cCI6MTc2NDAxOTE1OX0.3sbSYY1DPx1yyk7IKzIZnCQFArVWRsFhZfI6PKzMBQg
+@jwt_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoiOWQ0Y2U1Y2QtNjBiZi00M2NlLTk0NTAtYzQyZWY3N2RlMjUwIiwiZW1haWwiOiJsdWphbjk4MTRAZ21haWwuY29tIiwibm9tYnJlIjoiTWF0aWFzIiwiYXBlbGxpZG8iOiJMdWphbiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc2Mzk1NTM2NiwiZXhwIjoxNzY0MDQxNzY2fQ.wgLKmQzFuCgZanSgcKWH3xYHAJFU3irrvhOfV-EC5I0
 
 GET {{host}}/api/user/users
 Authorization: Bearer {{jwt_token}}
@@ -27,11 +27,11 @@ POST {{host}}/api/user/create
 Content-Type: application/json
 
 {
-    "nombre":"Matias",
-    "apellido":"Lujan",
+    "nombre":"Usertest",
+    "apellido":"Usertest",
     "fecha_nacimiento":"1998-07-14",
-    "password":"matiaslujan",
-    "email": "user@gmail.com"
+    "password":"Usertest",
+    "email": "Usertest@gmail.com"
 }
 
 ###

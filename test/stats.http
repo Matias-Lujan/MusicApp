@@ -1,0 +1,22 @@
+@host=http://127.0.0.1:3001
+@jwt_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoiNWRmOTdiZDEtOGRiOS00YmYzLWIzZWQtOTc4YjI2OTQzMGM4IiwiZW1haWwiOiJ1c2VydGVzdEBnbWFpbC5jb20iLCJub21icmUiOiJVc2VydGVzdCIsImFwZWxsaWRvIjoiVXNlcnRlc3QiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc2Mzk1OTU5NCwiZXhwIjoxNzY0MDQ1OTk0fQ.CupcjXPo8TVBiOX53M3hSAm4_R49X5IQq7Ai3QeGLuo
+
+###
+GET {{host}}/api/stats/top-songs?limit=3
+Authorization: Bearer {{jwt_token}}
+
+###
+GET {{host}}/api/stats/me/top-songs?limit=3
+Authorization: Bearer {{jwt_token}}
+
+###
+GET {{host}}/api/stats/me/top-artists?limit=3
+Authorization: Bearer {{jwt_token}}
+
+###
+GET {{host}}/api/stats/me/top-albums?limit=3
+Authorization: Bearer {{jwt_token}}
+
+###
+GET {{host}}/api/stats/me/top-genres?limit=5
+Authorization: Bearer {{jwt_token}}

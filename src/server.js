@@ -5,6 +5,7 @@ import songRouter from './routers/song.router.js';
 import userRouter from './routers/user.router.js';
 import authRouter from './routers/auth.routers.js';
 import notFounderHandler from './middleware/notFoundHandler.js';
+import statsRouter from './routers/stats.router.js';
 
 const server = express();
 const morganFormat = morgan(':method :url :status :res[content-length] - :response-time ms');
@@ -22,6 +23,7 @@ server.get('/', (req, res) => {
 server.use('/api/song', songRouter);
 server.use('/api/user', userRouter);
 server.use('/api/auth', authRouter);
+server.use('/api/stats', statsRouter);
 
 /* server.use((req, res, next) => {
   res.status(404).send('No esta disponible este endpoint: ' + req.url);

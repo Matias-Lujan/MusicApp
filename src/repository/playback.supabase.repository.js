@@ -30,4 +30,58 @@ export default class PlaybackRepositorySupabase {
 
     return data;
   };
+
+  getTopSongsGlobal = async (limit) => {
+    const { data, error } = await this.supabase.rpc('top_songs_global', {
+      limit_param: limit,
+    });
+
+    if (error) throw new Error(error.message);
+
+    return data;
+  };
+
+  getTopSongsByUser = async (userId, limit) => {
+    const { data, error } = await this.supabase.rpc('top_songs_by_user', {
+      user_uuid: userId,
+      limit_param: limit,
+    });
+
+    if (error) throw new Error(error.message);
+
+    return data;
+  };
+
+  getTopArtistsByUser = async (userId, limit) => {
+    const { data, error } = await this.supabase.rpc('top_artists_by_user', {
+      user_uuid: userId,
+      limit_param: limit,
+    });
+
+    if (error) throw new Error(error.message);
+
+    return data;
+  };
+
+  getTopAlbumsByUser = async (userId, limit) => {
+    const { data, error } = await this.supabase.rpc('top_albums_by_user', {
+      user_uuid: userId,
+      limit_param: limit,
+    });
+
+    if (error) throw new Error(error.message);
+
+    return data;
+  };
+
+  getTopGenresByUser = async (userId, limit) => {
+    const { data, error } = await this.supabase.rpc('top_genres_by_user', {
+      user_uuid: userId,
+      limit_param: limit,
+    });
+
+    if (error) throw new Error(error.message);
+
+    return data;
+  };
 }

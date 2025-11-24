@@ -1,5 +1,5 @@
 @host=http://127.0.0.1:3001
-@jwt_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoiOWQ0Y2U1Y2QtNjBiZi00M2NlLTk0NTAtYzQyZWY3N2RlMjUwIiwiZW1haWwiOiJsdWphbjk4MTRAZ21haWwuY29tIiwibm9tYnJlIjoiTWF0aWFzIiwiYXBlbGxpZG8iOiJMdWphbiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc2Mzk0MjY3MCwiZXhwIjoxNzY0MDI5MDcwfQ.-HSiw7cLL5TXX8zvtXiZqVVy_dIblzuRFu1JlHGWMPI
+@jwt_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoiOWQ0Y2U1Y2QtNjBiZi00M2NlLTk0NTAtYzQyZWY3N2RlMjUwIiwiZW1haWwiOiJsdWphbjk4MTRAZ21haWwuY29tIiwibm9tYnJlIjoiTWF0aWFzIiwiYXBlbGxpZG8iOiJMdWphbiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc2Mzk1NTM2NiwiZXhwIjoxNzY0MDQxNzY2fQ.wgLKmQzFuCgZanSgcKWH3xYHAJFU3irrvhOfV-EC5I0
 
 
 ###
@@ -19,8 +19,8 @@ Authorization: Bearer {{jwt_token}}
 Content-Type: application/json
 
 {
-    "titulo":"shape of you",
-    "artista": "ed sheeran"
+  "titulo": "Take On Me",
+  "artista": "a-ha"
 }
 
 ###

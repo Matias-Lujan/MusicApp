@@ -22,4 +22,23 @@ export const statsService = {
   async getTopGenresByUser(userId, limit) {
     return database.getTopGenresByUser(userId, limit);
   },
+
+  async getAllStats(userId, limit) {
+    const [topSongsGlobal, topSongsUser, topArtistsUser, topAlbumsUser, topGenresUser] =
+      await Promise.all([
+        this.getTopSongsGlobal(limit),
+        this.getTopSongsByUser(userId, limit),
+        this.getTopArtistsByUser(userId, limit),
+        this.getTopAlbumsByUser(userId, limit),
+        this.getTopGenresByUser(userId, limit),
+      ]);
+
+    return {
+      topSongsGlobal,
+      topSongsUser,
+      topArtistsUser,
+      topAlbumsUser,
+      topGenresUser,
+    };
+  },
 };

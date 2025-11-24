@@ -158,3 +158,7 @@ begin
   limit limit_param;
 end;
 $$ language plpgsql stable;
+
+/*para el xlsx con power shell:
+curl.exe -H "Authorization: Bearer TOKEN" "http://127.0.0.1:3001/api/stats/export?limit=3" -o "exports/musicapp_stats_curl.xlsx"
+*/

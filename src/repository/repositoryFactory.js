@@ -2,6 +2,7 @@
 import { config } from '../config/config.js';
 import SongRepositorySupabase from './song.supabase.repository.js';
 import UserRepositorySupabase from './user.supabase.repository.js';
+import PlaybackRepositorySupabase from './playback.supabase.repository.js';
 // import SongRepositoryMongoose from './song.mongo.repository.js';
 // import UserRepositoryMongoose from './user.mongo.repository.js';
 
@@ -37,6 +38,21 @@ export class RepositoryFactory {
 
       default:
         throw new Error(`Tipo de base de datos no soportado para users: ${databaseType}`);
+    }
+  }
+
+  static getPlaybackRepository() {
+    const databaseType = this.#getDatabaseType();
+
+    switch (databaseType) {
+      case 'supabase':
+        return new PlaybackRepositorySupabase();
+
+      // case 'mongoose':
+      //   return new UserRepositoryMongoose();
+
+      default:
+        throw new Error(`Tipo de base de datos no soportado para playback_log: ${databaseType}`);
     }
   }
 }

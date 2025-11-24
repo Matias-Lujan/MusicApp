@@ -1,0 +1,6 @@
+@host=http://127.0.0.1:3001
+@jwt_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoiOWQ0Y2U1Y2QtNjBiZi00M2NlLTk0NTAtYzQyZWY3N2RlMjUwIiwiZW1haWwiOiJsdWphbjk4MTRAZ21haWwuY29tIiwibm9tYnJlIjoiTWF0aWFzIiwiYXBlbGxpZG8iOiJMdWphbiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc2Mzk0NDI3MiwiZXhwIjoxNzY0MDMwNjcyfQ.wj42kErzcKdnExNmxMFzzqK-_0-X0RSK8DaoV-p4XQY
+
+###
+POST {{host}}/api/song/play/9207badc-d48d-491a-8e6a-942bfec708d3
+Authorization: Bearer {{jwt_token}}

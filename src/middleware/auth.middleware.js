@@ -18,7 +18,13 @@ export function authMiddleware(req, res, next) {
   try {
     const decoded = jwt.verify(token, config.JWT_SECRET_KEY);
 
-    req.user = decoded;
+    req.user = {
+      id: decoded.subject,              
+      email: decoded.email,
+      nombre: decoded.nombre,
+      apellido: decoded.apellido,
+      role: decoded.role,
+    };
 
     next();
   } catch (error) {

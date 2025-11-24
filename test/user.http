@@ -27,11 +27,11 @@ POST {{host}}/api/user/create
 Content-Type: application/json
 
 {
-    "nombre":"Usertest",
-    "apellido":"Usertest",
-    "fecha_nacimiento":"1998-07-14",
-    "password":"Usertest",
-    "email": "Usertest@gmail.com"
+    "nombre":"Ezequuiel",
+    "apellido":"Carranza",
+    "fecha_nacimiento":"1999-06-26",
+    "password":"Password123",
+    "email": "ezequuielcarranza02@gmail.com"
 }
 
 ###

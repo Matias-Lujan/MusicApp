@@ -1,0 +1,57 @@
+@host=http://127.0.0.1:3001
+@jwt_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoiY2VlNDk1NWQtNTkyNS00OTI0LTlhNGEtNjY0YjcxMGMyZDUwIiwiZW1haWwiOiJlemVxdXVpZWxjYXJyYW56YTAyQGdtYWlsLmNvbSIsIm5vbWJyZSI6IkV6ZXF1dWllbCIsImFwZWxsaWRvIjoiQ2FycmFuemEiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc2NDAwOTczNSwiZXhwIjoxNzY0MDk2MTM1fQ.uizaUl1pBSUk3GVMqsrnvLFeTuz0KmRghLo_WIgg8bE
+
+### Obtener todas las playlists del usuario autenticado
+GET {{host}}/api/playlist/playlists
+Authorization: Bearer {{jwt_token}}
+Content-Type: application/json
+
+### Crear una nueva playlist
+POST {{host}}/api/playlist/playlists
+Authorization: Bearer {{jwt_token}}
+Content-Type: application/json
+
+{
+  "nombre": "Gym",
+  "descripcion": "Canciones que más me gustan para hacer ejercicio"
+}
+
+### Obtener una playlist por ID
+GET {{host}}/api/playlist/playlists/a7d7ae3b-1459-45c2-8520-973967628666
+Authorization: Bearer {{jwt_token}}
+Content-Type: application/json
+
+### Actualizar una playlist
+PATCH {{host}}/api/playlist/playlists/a7d7ae3b-1459-45c2-8520-973967628670
+Authorization: Bearer {{jwt_token}}
+Content-Type: application/json
+
+{
+  "nombre": "Rock Actualizado`",
+  "descripcion": "Descripción actualizada"
+}
+
+### Obtener todas las canciones de una playlist
+GET {{host}}/api/playlist/playlists/a7d7ae3b-1459-45c2-8520-973967628670/songs
+Authorization: Bearer {{jwt_token}}
+Content-Type: application/json
+
+### Agregar una canción a una playlist
+POST {{host}}/api/playlist/playlists/a7d7ae3b-1459-45c2-8520-973967628670/songs
+Authorization: Bearer {{jwt_token}}
+Content-Type: application/json
+
+{
+  "songId": "ac2e0994-a5e7-44ec-9e2e-e5b92a7468ce"
+}
+
+### Remover una canción de una playlist
+DELETE {{host}}/api/playlist/playlists/a7d7ae3b-1459-45c2-8520-973967628670/songs/ac2e0994-a5e7-44ec-9e2e-e5b92a7468ce
+Authorization: Bearer {{jwt_token}}
+Content-Type: application/json
+
+### Eliminar una playlist
+DELETE {{host}}/api/playlist/playlists/a7d7ae3b-1459-45c2-8520-973967628670
+Authorization: Bearer {{jwt_token}}
+Content-Type: application/json
+

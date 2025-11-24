@@ -31,6 +31,24 @@ create table public.playback_log (
   played_at       timestamp with time zone default now() not null
 );
 
+--Tabla de playlists
+create table public.playlists (
+  id              uuid primary key default gen_random_uuid(),
+  user_id         uuid not null references public.users(id) on delete cascade,
+  nombre          text not null,
+  descripcion     text,
+  created_at      timestamp with time zone default now()
+);
+
+--Tabla de relación entre playlists y canciones
+create table public.playlist_songs (
+  id              uuid primary key default gen_random_uuid(),
+  playlist_id     uuid not null references public.playlists(id) on delete cascade,
+  song_id         uuid not null references public.songs(id) on delete cascade,
+  added_at        timestamp with time zone default now() not null,
+  unique(playlist_id, song_id) -- Evita duplicados de canciones en la misma playlist
+);
+
 
 --Funcion para obtener Top global de reproducciones
 create or replace function top_songs_global(limit_param integer)
@@ -160,5 +178,5 @@ end;
 $$ language plpgsql stable;
 
 /*para el xlsx con power shell:
-curl.exe -H "Authorization: Bearer TOKEN" "http://127.0.0.1:3001/api/stats/export?limit=3" -o "exports/musicapp_stats_curl.xlsx"
+curl.exe -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoiY2VlNDk1NWQtNTkyNS00OTI0LTlhNGEtNjY0YjcxMGMyZDUwIiwiZW1haWwiOiJlemVxdXVpZWxjYXJyYW56YTAyQGdtYWlsLmNvbSIsIm5vbWJyZSI6IkV6ZXF1dWllbCIsImFwZWxsaWRvIjoiQ2FycmFuemEiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc2NDAwNzk0NywiZXhwIjoxNzY0MDk0MzQ3fQ.UlqCApYMuQ1yknZ8NhPSo7xQShOAC1daZtp8PuT1Z6I" "http://127.0.0.1:3001/api/stats/export?limit=3" -o "exports/musicapp_stats_curl.xlsx"
 */

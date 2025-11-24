@@ -4,6 +4,7 @@ import morgan from 'morgan';
 import songRouter from './routers/song.router.js';
 import userRouter from './routers/user.router.js';
 import authRouter from './routers/auth.routers.js';
+import playlistRouter from './routers/playlist.router.js';
 import notFounderHandler from './middleware/notFoundHandler.js';
 import statsRouter from './routers/stats.router.js';
 import statsExportRouter from './routers/stats.export.router.js';
@@ -24,6 +25,7 @@ server.get('/', (req, res) => {
 server.use('/api/song', songRouter);
 server.use('/api/user', userRouter);
 server.use('/api/auth', authRouter);
+server.use('/api/playlist', playlistRouter);
 server.use('/api/stats', statsRouter);
 server.use('/api/stats', statsExportRouter);
 /* server.use((req, res, next) => {

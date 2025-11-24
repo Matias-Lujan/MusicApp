@@ -1,8 +1,8 @@
 @host=http://127.0.0.1:3001
-@jwt_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoiNWRmOTdiZDEtOGRiOS00YmYzLWIzZWQtOTc4YjI2OTQzMGM4IiwiZW1haWwiOiJ1c2VydGVzdEBnbWFpbC5jb20iLCJub21icmUiOiJVc2VydGVzdCIsImFwZWxsaWRvIjoiVXNlcnRlc3QiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc2Mzk2NDQ0MiwiZXhwIjoxNzY0MDUwODQyfQ.S8YKM1ny9UAjbGzQSQdALc0Bxg43vWmtHKUt513LZE8
+@jwt_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoiY2VlNDk1NWQtNTkyNS00OTI0LTlhNGEtNjY0YjcxMGMyZDUwIiwiZW1haWwiOiJlemVxdXVpZWxjYXJyYW56YTAyQGdtYWlsLmNvbSIsIm5vbWJyZSI6IkV6ZXF1dWllbCIsImFwZWxsaWRvIjoiQ2FycmFuemEiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc2NDAwNzk0NywiZXhwIjoxNzY0MDk0MzQ3fQ.UlqCApYMuQ1yknZ8NhPSo7xQShOAC1daZtp8PuT1Z6I
 
 ###
-GET {{host}}/api/stats/top-songs?limit=3
+GET {{host}}/api/stats/top-songs?limit=5
 Authorization: Bearer {{jwt_token}}
 
 ###

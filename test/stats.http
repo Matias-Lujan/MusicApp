@@ -1,27 +1,36 @@
 @host=http://127.0.0.1:3001
-@jwt_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoiY2VlNDk1NWQtNTkyNS00OTI0LTlhNGEtNjY0YjcxMGMyZDUwIiwiZW1haWwiOiJlemVxdXVpZWxjYXJyYW56YTAyQGdtYWlsLmNvbSIsIm5vbWJyZSI6IkV6ZXF1dWllbCIsImFwZWxsaWRvIjoiQ2FycmFuemEiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc2NDAwNzk0NywiZXhwIjoxNzY0MDk0MzQ3fQ.UlqCApYMuQ1yknZ8NhPSo7xQShOAC1daZtp8PuT1Z6I
+### TOKEN de usuario normal (ROLE = USER)
+@jwt_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoiNWRmOTdiZDEtOGRiOS00YmYzLWIzZWQtOTc4YjI2OTQzMGM4IiwiZW1haWwiOiJ1c2VydGVzdEBnbWFpbC5jb20iLCJub21icmUiOiJVc2VydGVzdHRlc3QiLCJhcGVsbGlkbyI6IlVzZXJ0ZXN0Iiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NjQwOTk1ODEsImV4cCI6MTc2NDE4NTk4MX0.R3KfQMFqvhFTAVABDEweqgemUiYCpfeDB3itcfhAxG4
+### TOKEN de administrador (ROLE = ADMIN)
+@admin_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoiOWQ0Y2U1Y2QtNjBiZi00M2NlLTk0NTAtYzQyZWY3N2RlMjUwIiwiZW1haWwiOiJsdWphbjk4MTRAZ21haWwuY29tIiwibm9tYnJlIjoiTWF0aWFzIiwiYXBlbGxpZG8iOiJMdWphbiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc2NDEwNzgxNiwiZXhwIjoxNzY0MTk0MjE2fQ.O9vDN3D89MRi6NFbgPFbRh63XzN6Ig2hfIvX7mH9Oss
 
-###
-GET {{host}}/api/stats/top-songs?limit=5
+
+### TOP CANCIONES (GLOBAL) ----------------------------------
+GET {{host}}/api/stats/top-songs?limit=3
 Authorization: Bearer {{jwt_token}}
 
-###
+
+### MIS TOP CANCIONES (USER) ----------------------------------
 GET {{host}}/api/stats/me/top-songs?limit=3
 Authorization: Bearer {{jwt_token}}
 
-###
+
+### MIS TOP ARTISTAS (USER) ----------------------------------
 GET {{host}}/api/stats/me/top-artists?limit=3
 Authorization: Bearer {{jwt_token}}
 
-###
+
+### MIS TOP ALBUMS (USER) ----------------------------------
 GET {{host}}/api/stats/me/top-albums?limit=3
 Authorization: Bearer {{jwt_token}}
 
-###
+
+### MIS TOP GENEROS (USER) ----------------------------------
 GET {{host}}/api/stats/me/top-genres?limit=3
 Authorization: Bearer {{jwt_token}}
 
-###
+
+### EXPORTAR ESTADISTICAS A EXCEL -----------------------------
 GET {{host}}/api/stats/export?limit=3
 Authorization: Bearer {{jwt_token}}
 

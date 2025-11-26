@@ -9,6 +9,17 @@ export default class PlaylistRepositorySupabase {
     this.supabase = await DatabaseFactory.getConnection();
   }
 
+  getAll = async () => {
+    const { data, error } = await this.supabase
+      .from('playlists')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) throw new Error(error.message);
+
+    return data;
+  };
+
   // Obtener todas las playlists de un usuario
   getAllByUserId = async (userId) => {
     const { data, error } = await this.supabase
@@ -24,11 +35,7 @@ export default class PlaylistRepositorySupabase {
 
   // Obtener una playlist por ID
   getById = async (id) => {
-    const { data, error } = await this.supabase
-      .from('playlists')
-      .select('*')
-      .eq('id', id)
-      .single();
+    const { data, error } = await this.supabase.from('playlists').select('*').eq('id', id).single();
 
     if (error) throw new Error(error.message);
 
@@ -156,4 +163,3 @@ export default class PlaylistRepositorySupabase {
     return data !== null;
   };
 }
-

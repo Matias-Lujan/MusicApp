@@ -16,24 +16,25 @@ export const SongController = {
   },
 
   getById: async (req, res) => {
-    const id = req.params.id;
+    const { id } = req.params;
     console.log(`ID enviado x parametro -> ${id}`);
 
     try {
-      const responseData = await database.getById(id);
+      const song = await songService.getSongById(id);
+
       res.json({
         status: 200,
         OK: true,
-        message: 'Existe la cancion',
-        playload: songResponseDTO(responseData),
+        payload: songResponseDTO(song),
       });
     } catch (error) {
-      res.json({
-        status: 400,
+      const status = error.statusCode || 400;
+
+      res.status(status).json({
+        status,
         OK: false,
-        message: `No existe cancion para ID -> ${id}`,
+        message: error.message,
       });
-      return;
     }
   },
 

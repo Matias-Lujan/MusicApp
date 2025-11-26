@@ -8,8 +8,22 @@ import { playlistService } from '../services/playlist.service.js';
 export const PlaylistController = {
   getAll: async (req, res) => {
     try {
-      const userId = req.user.id;
-      const playlists = await playlistService.getAllPlaylistsByUser(userId);
+      const { id: userId, role } = req.user;
+
+      const playlists = await playlistService.getAllPlaylists(userId, role);
+
+      if (playlists.length === 0) {
+        return res.json({
+          status: 200,
+          OK: true,
+          message:
+            role === 'ADMIN'
+              ? 'No hay playlists creadas aún en el sistema'
+              : 'No tienes playlists creadas aún',
+          payload: [],
+        });
+      }
+
       res.json({
         status: 200,
         OK: true,
@@ -26,12 +40,41 @@ export const PlaylistController = {
     }
   },
 
+  /* getAll: async (req, res) => {
+    try {
+      const userId = req.user.id;
+      const playlists = await playlistService.getAllPlaylistsByUser(userId);
+
+      if (playlists.length === 0) {
+        return res.json({
+          status: 200,
+          OK: true,
+          message: 'No tienes playlists creadas aún',
+          payload: [],
+        });
+      }
+      res.json({
+        status: 200,
+        OK: true,
+        payload: playlistListResponseDTO(playlists),
+      });
+    } catch (error) {
+      console.log('Error al obtener las playlists', error.message);
+      const status = error.statusCode || 500;
+      res.status(status).json({
+        status,
+        OK: false,
+        message: error.message || 'Error interno del servidor',
+      });
+    }
+  }, */
+
   getById: async (req, res) => {
     const { id } = req.params;
-    const userId = req.user.id;
+    const { id: userId, role } = req.user;
 
     try {
-      const playlist = await playlistService.getPlaylistById(id, userId);
+      const playlist = await playlistService.getPlaylistById(id, userId, role);
       res.json({
         status: 200,
         OK: true,
@@ -77,10 +120,10 @@ export const PlaylistController = {
 
   updatePlaylist: async (req, res) => {
     const { id } = req.params;
-    const userId = req.user.id;
+    const { id: userId, role } = req.user;
 
     try {
-      const playlist = await playlistService.updatePlaylist(id, userId, req.body);
+      const playlist = await playlistService.updatePlaylist(id, userId, role, req.body);
 
       res.json({
         status: 200,
@@ -100,10 +143,10 @@ export const PlaylistController = {
 
   deletePlaylist: async (req, res) => {
     const { id } = req.params;
-    const userId = req.user.id;
+    const { id: userId, role } = req.user;
 
     try {
-      const playlist = await playlistService.deletePlaylist(id, userId);
+      const playlist = await playlistService.deletePlaylist(id, userId, role);
 
       res.json({
         status: 200,
@@ -123,11 +166,11 @@ export const PlaylistController = {
 
   getSongs: async (req, res) => {
     const { id } = req.params;
-    const userId = req.user.id;
+    const { id: userId, role } = req.user;
 
     try {
-      const playlist = await playlistService.getPlaylistById(id, userId);
-      const songs = await playlistService.getSongsByPlaylist(id, userId);
+      const playlist = await playlistService.getPlaylistById(id, userId, role);
+      const songs = await playlistService.getSongsByPlaylist(id, userId, role);
 
       res.json({
         status: 200,
@@ -147,10 +190,10 @@ export const PlaylistController = {
   addSong: async (req, res) => {
     const { id } = req.params;
     const { songId } = req.body;
-    const userId = req.user.id;
+    const { id: userId, role } = req.user;
 
     try {
-      await playlistService.addSongToPlaylist(id, songId, userId);
+      await playlistService.addSongToPlaylist(id, songId, userId, role);
 
       res.json({
         status: 200,
@@ -169,10 +212,10 @@ export const PlaylistController = {
 
   removeSong: async (req, res) => {
     const { id, songId } = req.params;
-    const userId = req.user.id;
+    const { id: userId, role } = req.user;
 
     try {
-      await playlistService.removeSongFromPlaylist(id, songId, userId);
+      await playlistService.removeSongFromPlaylist(id, songId, userId, role);
 
       res.json({
         status: 200,
@@ -189,4 +232,3 @@ export const PlaylistController = {
     }
   },
 };
-

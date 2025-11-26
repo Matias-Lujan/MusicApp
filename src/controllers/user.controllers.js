@@ -16,28 +16,24 @@ export const UserController = {
   },
 
   getById: async (req, res) => {
-    const id = req.params.id;
-    console.log(`ID enviado x parametro -> ${id}`);
+    const { id } = req.params;
 
     try {
-      const responseData = await database.getById(id);
-
-      if (!responseData) {
-        return res
-          .status(404)
-          .json({ status: 404, OK: false, message: `No existe usuario para ID -> ${id}` });
-      }
+      const user = await userService.getUserById(id);
 
       return res.json({
         status: 200,
         OK: true,
-        message: 'Existe el usuario',
-        payload: userResponseDTO(responseData),
+        payload: userResponseDTO(user),
       });
     } catch (error) {
-      return res
-        .status(400)
-        .json({ status: 400, OK: false, message: `No existe usuario para ID -> ${id}` });
+      const status = error.statusCode || 400;
+
+      return res.status(status).json({
+        status,
+        OK: false,
+        message: error.message,
+      });
     }
   },
 

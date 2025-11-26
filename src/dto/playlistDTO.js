@@ -28,15 +28,17 @@ export const playlistListResponseDTO = (playlists = []) => {
 export const playlistWithSongsResponseDTO = (playlist, songs = []) => {
   if (!playlist) return null;
 
-  const normalizedSongs = songs.map((playlistSong) => {
-    if (playlistSong.songs) {
-      return {
-        ...songResponseDTO(playlistSong.songs),
-        addedAt: playlistSong.added_at,
-      };
-    }
-    return null;
-  }).filter(Boolean);
+  const normalizedSongs = songs
+    .map((playlistSong) => {
+      if (playlistSong.songs) {
+        return {
+          ...songResponseDTO(playlistSong.songs),
+          addedAt: playlistSong.added_at,
+        };
+      }
+      return null;
+    })
+    .filter(Boolean);
 
   return {
     ...playlistResponseDTO(playlist),
@@ -44,4 +46,3 @@ export const playlistWithSongsResponseDTO = (playlist, songs = []) => {
     totalCanciones: normalizedSongs.length,
   };
 };
-

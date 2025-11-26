@@ -1,44 +1,52 @@
 @host=http://127.0.0.1:3001
-@jwt_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoiOWQ0Y2U1Y2QtNjBiZi00M2NlLTk0NTAtYzQyZWY3N2RlMjUwIiwiZW1haWwiOiJsdWphbjk4MTRAZ21haWwuY29tIiwibm9tYnJlIjoiTWF0aWFzIiwiYXBlbGxpZG8iOiJMdWphbiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc2Mzk1NTM2NiwiZXhwIjoxNzY0MDQxNzY2fQ.wgLKmQzFuCgZanSgcKWH3xYHAJFU3irrvhOfV-EC5I0
+### TOKEN de usuario normal (ROLE = USER)
+@jwt_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoiNWRmOTdiZDEtOGRiOS00YmYzLWIzZWQtOTc4YjI2OTQzMGM4IiwiZW1haWwiOiJ1c2VydGVzdEBnbWFpbC5jb20iLCJub21icmUiOiJVc2VydGVzdHRlc3QiLCJhcGVsbGlkbyI6IlVzZXJ0ZXN0Iiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NjQwOTk1ODEsImV4cCI6MTc2NDE4NTk4MX0.R3KfQMFqvhFTAVABDEweqgemUiYCpfeDB3itcfhAxG4
+### TOKEN de administrador (ROLE = ADMIN)
+@admin_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoiOWQ0Y2U1Y2QtNjBiZi00M2NlLTk0NTAtYzQyZWY3N2RlMjUwIiwiZW1haWwiOiJsdWphbjk4MTRAZ21haWwuY29tIiwibm9tYnJlIjoiTWF0aWFzIiwiYXBlbGxpZG8iOiJMdWphbiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc2NDA5OTI5NiwiZXhwIjoxNzY0MTg1Njk2fQ.LMvbeQXZrJusNF4nMmsBARAycmVVqyc9HugXuaP1vw0
 
+
+
+### OBTENER TODOS LOS USUARIOS (solo ADMIN) -----------------------
+###
 GET {{host}}/api/user/users
-Authorization: Bearer {{jwt_token}}
+Authorization: Bearer {{admin_token}}
 
+### OBTENER USUARIO POR ID (solo ADMIN)----------------------------------------
 ###
-GET {{host}}/api/user/ac05de4c-67b1-4b21-8ea3-e9040f65546a
-Authorization: Bearer {{jwt_token}}
+GET {{host}}/api/user/5df97bd1-8db9-4bf3-b3ed-978b269430c8
+Authorization: Bearer {{admin_token}}
 
+### ELIMINAR USUARIO (solo ADMIN) --------------------------------
 ###
-DELETE {{host}}/api/user/ac05de4c-67b1-4b21-8ea3-e9040f65546a
-Authorization: Bearer {{jwt_token}}
+DELETE {{host}}/api/user/12cc244f-a6e8-4c1d-b56b-588cf6b6e273
+Authorization: Bearer {{admin_token}}
 
+### ACTUALIZAR DATOS DE USUARIO (solo ADMIN)----------------------------------
 ###
-PATCH {{host}}/api/user/ac05de4c-67b1-4b21-8ea3-e9040f65546a
-Authorization: Bearer {{jwt_token}}
+PATCH {{host}}/api/user/4d11cd26-b4ff-42f0-81ee-06fb51f1d32f
+Authorization: Bearer {{admin_token}}
 Content-Type: application/json
 
 {
-  "nombre": "borrar",
-  "email": "UPDATEDdddd@example.com"
+  "nombre": "TESTEOOO",
+  "email": "TESTEOOO@gmail.com",
+  "role": "ADMIN"
 }
 
+### CREAR NUEVO USUARIO (registrarse) -------------------------------------------
 ###
 POST {{host}}/api/user/create
 Content-Type: application/json
 
 {
-    "nombre":"Ezequuiel",
-    "apellido":"Carranza",
-    "fecha_nacimiento":"1999-06-26",
-    "password":"Password123",
-    "email": "ezequuielcarranza02@gmail.com"
+  "nombre": "USUARIOTEST",
+  "apellido": "USUARIOTEST",
+  "fecha_nacimiento": "1999-06-26",
+  "password": "USUARIOTEST",
+  "email": "lujan9814@gmail.com"
 }
 
-###
-PATCH {{host}}/api/user/c52cb3e9-89c4-4aee-bf3d-f313d02337a5
+### CASO NEGATIVO ----------------------------------
+### USER intenta eliminar un usuario
+DELETE {{host}}/api/user/9d470e86-1fba-4c63-a935-97497121fc09
 Authorization: Bearer {{jwt_token}}
-Content-Type: application/json
-
-{
-  "role": "ADMIN"
-}

@@ -1,10 +1,17 @@
 @host=http://127.0.0.1:3001
-@jwt_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoiY2VlNDk1NWQtNTkyNS00OTI0LTlhNGEtNjY0YjcxMGMyZDUwIiwiZW1haWwiOiJlemVxdXVpZWxjYXJyYW56YTAyQGdtYWlsLmNvbSIsIm5vbWJyZSI6IkV6ZXF1dWllbCIsImFwZWxsaWRvIjoiQ2FycmFuemEiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc2NDAwNzk0NywiZXhwIjoxNzY0MDk0MzQ3fQ.UlqCApYMuQ1yknZ8NhPSo7xQShOAC1daZtp8PuT1Z6I
+### TOKEN de usuario normal (ROLE = USER)
+@jwt_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoiNWRmOTdiZDEtOGRiOS00YmYzLWIzZWQtOTc4YjI2OTQzMGM4IiwiZW1haWwiOiJ1c2VydGVzdEBnbWFpbC5jb20iLCJub21icmUiOiJVc2VydGVzdHRlc3QiLCJhcGVsbGlkbyI6IlVzZXJ0ZXN0Iiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NjQwOTk1ODEsImV4cCI6MTc2NDE4NTk4MX0.R3KfQMFqvhFTAVABDEweqgemUiYCpfeDB3itcfhAxG4
+### TOKEN de administrador (ROLE = ADMIN)
+@admin_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoiOWQ0Y2U1Y2QtNjBiZi00M2NlLTk0NTAtYzQyZWY3N2RlMjUwIiwiZW1haWwiOiJsdWphbjk4MTRAZ21haWwuY29tIiwibm9tYnJlIjoiTWF0aWFzIiwiYXBlbGxpZG8iOiJMdWphbiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc2NDEwNzgxNiwiZXhwIjoxNzY0MTk0MjE2fQ.O9vDN3D89MRi6NFbgPFbRh63XzN6Ig2hfIvX7mH9Oss
 
+
+### REPRODUCIR CANCION ----------------------------------
 ###
-POST {{host}}/api/song/play/82ed38c6-0340-48cc-852c-bfac856e6dc0
+POST {{host}}/api/song/play/d1334a20-2cc5-4341-a4b5-5d39c8ea6352
 Authorization: Bearer {{jwt_token}}
 
-###
-POST {{host}}/api/song/play/5374f0dd-51cf-4c47-9621-796a390bb9f7
+### CASO NEGATIVO ---------------------------------- 
+### no existe la cancion
+### 
+POST {{host}}/api/song/play/5374f0dd-51cf-4c47-9621-796a390bb0f7 
 Authorization: Bearer {{jwt_token}}

@@ -7,6 +7,14 @@ function cleanObject(obj) {
   return Object.fromEntries(Object.entries(obj).filter(([, value]) => value !== undefined));
 }
 
+function assertPlaylistAccess(playlist, userId, role) {
+  if (playlist.user_id !== userId && role !== 'ADMIN') {
+    const error = new Error('No tienes permiso para acceder a esta playlist');
+    error.statusCode = 403;
+    throw error;
+  }
+}
+
 export const playlistService = {
   async createPlaylist({ userId, nombre, descripcion }) {
     if (!nombre || nombre.trim() === '') {
@@ -30,7 +38,7 @@ export const playlistService = {
     return playlists;
   },
 
-  async getPlaylistById(playlistId, userId) {
+  async getPlaylistById(playlistId, userId, role) {
     const playlist = await playlistRepository.getById(playlistId);
 
     if (!playlist) {
@@ -39,17 +47,12 @@ export const playlistService = {
       throw error;
     }
 
-    // Verificar que el usuario sea el dueño de la playlist
-    if (playlist.user_id !== userId) {
-      const error = new Error('No tienes permiso para acceder a esta playlist');
-      error.statusCode = 403;
-      throw error;
-    }
+    assertPlaylistAccess(playlist, userId, role);
 
     return playlist;
   },
 
-  async updatePlaylist(playlistId, userId, payload) {
+  async updatePlaylist(playlistId, userId, role, payload) {
     const playlist = await playlistRepository.getById(playlistId);
 
     if (!playlist) {
@@ -58,12 +61,7 @@ export const playlistService = {
       throw error;
     }
 
-    // Verificar que el usuario sea el dueño de la playlist
-    if (playlist.user_id !== userId) {
-      const error = new Error('No tienes permiso para modificar esta playlist');
-      error.statusCode = 403;
-      throw error;
-    }
+    assertPlaylistAccess(playlist, userId, role);
 
     const dataToUpdate = cleanObject({
       nombre: payload.nombre,
@@ -93,7 +91,7 @@ export const playlistService = {
     return updatedPlaylist;
   },
 
-  async deletePlaylist(playlistId, userId) {
+  async deletePlaylist(playlistId, userId, role) {
     const playlist = await playlistRepository.getById(playlistId);
 
     if (!playlist) {
@@ -103,11 +101,7 @@ export const playlistService = {
     }
 
     // Verificar que el usuario sea el dueño de la playlist
-    if (playlist.user_id !== userId) {
-      const error = new Error('No tienes permiso para eliminar esta playlist');
-      error.statusCode = 403;
-      throw error;
-    }
+    assertPlaylistAccess(playlist, userId, role);
 
     const deletedPlaylist = await playlistRepository.deleteOne(playlistId);
 
@@ -120,7 +114,7 @@ export const playlistService = {
     return deletedPlaylist;
   },
 
-  async addSongToPlaylist(playlistId, songId, userId) {
+  async addSongToPlaylist(playlistId, songId, userId, role) {
     // Verificar que la playlist existe y pertenece al usuario
     const playlist = await playlistRepository.getById(playlistId);
 
@@ -130,11 +124,7 @@ export const playlistService = {
       throw error;
     }
 
-    if (playlist.user_id !== userId) {
-      const error = new Error('No tienes permiso para modificar esta playlist');
-      error.statusCode = 403;
-      throw error;
-    }
+    assertPlaylistAccess(playlist, userId, role);
 
     // Verificar que la canción existe
     const song = await songRepository.getById(songId);
@@ -158,7 +148,7 @@ export const playlistService = {
     return result;
   },
 
-  async removeSongFromPlaylist(playlistId, songId, userId) {
+  async removeSongFromPlaylist(playlistId, songId, userId, role) {
     // Verificar que la playlist existe y pertenece al usuario
     const playlist = await playlistRepository.getById(playlistId);
 
@@ -168,11 +158,7 @@ export const playlistService = {
       throw error;
     }
 
-    if (playlist.user_id !== userId) {
-      const error = new Error('No tienes permiso para modificar esta playlist');
-      error.statusCode = 403;
-      throw error;
-    }
+    assertPlaylistAccess(playlist, userId, role);
 
     const result = await playlistRepository.removeSongFromPlaylist(playlistId, songId);
 
@@ -185,7 +171,7 @@ export const playlistService = {
     return result;
   },
 
-  async getSongsByPlaylist(playlistId, userId) {
+  async getSongsByPlaylist(playlistId, userId, role) {
     // Verificar que la playlist existe y pertenece al usuario
     const playlist = await playlistRepository.getById(playlistId);
 
@@ -195,14 +181,20 @@ export const playlistService = {
       throw error;
     }
 
-    if (playlist.user_id !== userId) {
-      const error = new Error('No tienes permiso para acceder a esta playlist');
-      error.statusCode = 403;
-      throw error;
-    }
+    assertPlaylistAccess(playlist, userId, role);
 
     const songs = await playlistRepository.getSongsByPlaylist(playlistId);
     return songs;
   },
-};
 
+  async getAllPlaylists(userId, role) {
+    if (role === 'ADMIN') {
+      // Admin
+      const playlists = await playlistRepository.getAll();
+      return playlists;
+    }
+    // User
+    const playlists = await playlistRepository.getAllByUserId(userId);
+    return playlists;
+  },
+};

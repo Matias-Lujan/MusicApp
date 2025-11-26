@@ -194,4 +194,16 @@ export const userService = {
 
     return deletedUser;
   },
+
+  async getUserById(id) {
+    const user = await database.getById(id);
+
+    if (!user) {
+      const error = new Error('Usuario no encontrado');
+      error.statusCode = 404;
+      throw error;
+    }
+
+    return user;
+  },
 };

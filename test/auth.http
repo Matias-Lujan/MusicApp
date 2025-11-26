@@ -1,14 +1,21 @@
 @host=http://127.0.0.1:3001
+### TOKEN de usuario normal (ROLE = USER)
+@jwt_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoiNWRmOTdiZDEtOGRiOS00YmYzLWIzZWQtOTc4YjI2OTQzMGM4IiwiZW1haWwiOiJ1c2VydGVzdEBnbWFpbC5jb20iLCJub21icmUiOiJVc2VydGVzdHRlc3QiLCJhcGVsbGlkbyI6IlVzZXJ0ZXN0Iiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NjQwOTk1ODEsImV4cCI6MTc2NDE4NTk4MX0.R3KfQMFqvhFTAVABDEweqgemUiYCpfeDB3itcfhAxG4
+### TOKEN de administrador (ROLE = ADMIN)
+@admin_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoiOWQ0Y2U1Y2QtNjBiZi00M2NlLTk0NTAtYzQyZWY3N2RlMjUwIiwiZW1haWwiOiJsdWphbjk4MTRAZ21haWwuY29tIiwibm9tYnJlIjoiTWF0aWFzIiwiYXBlbGxpZG8iOiJMdWphbiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc2NDA5OTI5NiwiZXhwIjoxNzY0MTg1Njk2fQ.LMvbeQXZrJusNF4nMmsBARAycmVVqyc9HugXuaP1vw0
 
+
+### LOGIN ADMIN ----------------------------------
 ### 
 POST {{host}}/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "ezequuielcarranza02@gmail.com",
-  "password": "Password123"
+  "email": "lujan9814@gmail.com",
+  "password": "matiaslujan"
 }
 
+### LOGIN USER ----------------------------------
 ### 
 POST {{host}}/api/auth/login
 Content-Type: application/json
@@ -16,4 +23,14 @@ Content-Type: application/json
 {
   "email": "usertest@gmail.com",
   "password": "Usertest"
+}
+
+### CASO NEGATIVO ----------------------------------
+### Password incorrecta
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "usertest@gmail.com",
+  "password": "incorrecto"
 }

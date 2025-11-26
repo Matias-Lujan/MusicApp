@@ -21,7 +21,7 @@ export default class SongRepositorySupabase {
   // Obtener una cancion por ID
   getById = async (id) => {
     const { data, error } = await this.supabase.from('songs').select('*').eq('id', id); //.single();
-
+    console.log(data);
     if (error) throw new Error(error.message);
 
     return data && data.length > 0 ? data[0] : null;

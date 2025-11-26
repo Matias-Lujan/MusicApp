@@ -1,0 +1,2029 @@
+openapi: 3.0.3
+info:
+  title: MusicApp API
+  version: 1.0.0
+  description: |
+    API REST de MusicApp para gestionar usuarios, canciones, playlists, reproducciones y estadísticas.
+    La mayoría de los endpoints requieren autenticación con JWT.
+    Quedan públicos los endpoints de login (`/api/auth/login`) y registro de usuario (`/api/user/create`).
+
+servers:
+  - url: http://127.0.0.1:3001
+    description: Servidor local de desarrollo
+
+tags:
+  - name: Auth
+    description: Autenticación y emisión de JWT
+  - name: Users
+    description: Gestión de usuarios
+  - name: Songs
+    description: Gestión de canciones
+  - name: Playback
+    description: Registro de reproducciones
+  - name: Stats
+    description: Estadísticas y exportación
+  - name: Playlists
+    description: Gestión de playlists de usuarios
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    ApiResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 200
+        OK:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: Operación realizada con éxito
+        payload:
+          description: Datos específicos de la operación
+          nullable: true
+
+    ErrorResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 400
+        OK:
+          type: boolean
+          example: false
+        message:
+          type: string
+          example: Error en la solicitud
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        nombre:
+          type: string
+          example: Fantasma
+        apellido:
+          type: string
+          example: Fantasmin
+        email:
+          type: string
+          format: email
+          example: fantasma@gmail.com
+        role:
+          type: string
+          enum: [USER, ADMIN]
+          example: USER
+        fecha_nacimiento:
+          type: string
+          format: date
+          example: 1999-06-26
+        created_at:
+          type: string
+          format: date-time
+
+    UserCreate:
+      type: object
+      required:
+        - nombre
+        - apellido
+        - email
+        - fecha_nacimiento
+        - password
+      properties:
+        nombre:
+          type: string
+          example: Fantasma
+        apellido:
+          type: string
+          example: Fantasmin
+        email:
+          type: string
+          format: email
+          example: fantasma@gmail.com
+        fecha_nacimiento:
+          type: string
+          format: date
+          example: 1999-06-26
+        password:
+          type: string
+          format: password
+          example: fantasma
+
+    UserUpdate:
+      type: object
+      properties:
+        nombre:
+          type: string
+          example: Usertesttest
+        apellido:
+          type: string
+          example: ApellidoActualizado
+        email:
+          type: string
+          format: email
+          example: usertest@gmail.com
+        role:
+          type: string
+          enum: [USER, ADMIN]
+          example: ADMIN
+
+
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+
+    LoginResponse:
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            token:
+              type: string
+              example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+            payload:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                nombre:
+                  type: string
+                apellido:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                role:
+                  type: string
+                  enum: [USER, ADMIN]
+
+    Song:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "7d4fc8bb-e0bb-43e8-a47c-250ea961a65c"
+        titulo:
+          type: string
+          example: "Blinding Lights"
+        artista:
+          type: string
+          example: "The Weeknd"
+        album:
+          type: string
+          example: "After Hours"
+        genero:
+          type: array
+          items:
+            type: string
+          example: ["Sin género"]
+        duracion:
+          type: string
+          description: Duración en formato mm:ss
+          example: "03:20"
+        fechaLanzamiento:
+          type: string
+          format: date
+          example: "2020-03-20"
+        portada:
+          type: string
+          description: URL de la portada
+          example: "https://i.scdn.co/image/ab67616d0000b2738863bc11d2aa12b54f5aeb36"
+
+
+    SongCreate:
+      type: object
+      required:
+        - titulo
+        - artista
+      properties:
+        titulo:
+          type: string
+        artista:
+          type: string
+
+    SongUpdate:
+      type: object
+      properties:
+        titulo:
+          type: string
+        artista:
+          type: string
+        album:
+          type: string
+        genero:
+          type: array
+          items:
+            type: string
+        duracion:
+          type: integer
+        portada:
+          type: string
+        fecha_lanzamiento:
+          type: string
+          format: date
+
+    Playback:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+          format: uuid
+        song_id:
+          type: string
+          format: uuid
+        played_at:
+          type: string
+          format: date-time
+
+    TopSong:
+      type: object
+      properties:
+        song_id:
+          type: string
+        titulo:
+          type: string
+        artista:
+          type: string
+        album:
+          type: string
+        reproducciones:
+          type: integer
+
+    TopArtist:
+      type: object
+      properties:
+        artista:
+          type: string
+        reproducciones:
+          type: integer
+
+    TopAlbum:
+      type: object
+      properties:
+        album:
+          type: string
+        reproducciones:
+          type: integer
+
+    TopGenre:
+      type: object
+      properties:
+        genero:
+          type: string
+        reproducciones:
+          type: integer
+
+# 🔐 Seguridad global: todos los endpoints requieren JWT salvo los que definan security: []
+security:
+  - bearerAuth: []
+
+paths:
+  /api/auth/login:
+    post:
+      tags: [Auth]
+      summary: Login de usuario
+      description: |
+        Autentica un usuario existente.  
+        Devuelve un token JWT y los datos del usuario autenticado.
+      security: []   # Endpoint público (no requiere JWT)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: lujan9814@gmail.com
+                password:
+                  type: string
+                  format: password
+                  example: matiaslujan
+      responses:
+        '200':
+          description: Login exitoso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 200
+                  OK:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Login exitoso
+                  payload:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                      nombre:
+                        type: string
+                      apellido:
+                        type: string
+                      email:
+                        type: string
+                        format: email
+                      role:
+                        type: string
+                        enum: [USER, ADMIN]
+                  token:
+                    type: string
+                    description: Token JWT
+                    example: >
+                      eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        '400':
+          description: Faltan campos requeridos (email o password)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Credenciales incorrectas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/user/users:
+    get:
+      tags: [Users]
+      summary: Listar todos los usuarios (solo ADMIN)
+      description: Devuelve el listado completo de usuarios.  
+        Requiere autenticación con JWT y rol ADMIN.
+      responses:
+        '200':
+          description: Listado de usuarios
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 200
+                  OK:
+                    type: boolean
+                    example: true
+                  payload:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+              example:
+                status: 200
+                OK: true
+                payload:
+                  - id: "9d470e86-1fba-4c63-a935-97497121fc09"
+                    nombre: "Fantasma"
+                    apellido: "Fantasmin"
+                    email: "fantasma@gmail.com"
+                    role: "USER"
+                  - id: "cee4955d-5925-4924-9a4a-664b710c2d50"
+                    nombre: "Ezequuiel"
+                    apellido: "Carranza"
+                    email: "ezequuielcarranza02@gmail.com"
+                    role: "ADMIN"
+                  - id: "9d4ce5cd-60bf-43ce-9450-c42ef77de250"
+                    nombre: "Matias"
+                    apellido: "Lujan"
+                    email: "lujan9814@gmail.com"
+                    role: "ADMIN"
+                  - id: "5df97bd1-8db9-4bf3-b3ed-978b269430c8"
+                    nombre: "Usertesttest"
+                    apellido: "Usertest"
+                    email: "usertest@gmail.com"
+                    role: "USER"
+
+        '401':
+          description: Token inválido o expirado
+          content:
+            application/json:
+              example:
+                status: 401
+                OK: false
+                message: "Token inválido o expirado"
+
+        '403':
+          description: Sin permisos (solo ADMIN)
+          content:
+            application/json:
+              example:
+                status: 403
+                OK: false
+                message: "No tenés permisos para acceder a este recurso"
+
+  /api/user/{id}:
+    get:
+      tags: [Users]
+      summary: Obtener usuario por ID (solo ADMIN)
+      description: Devuelve un usuario si existe.  
+        Requiere autenticación con JWT y rol ADMIN.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Usuario encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 200
+                  OK:
+                    type: boolean
+                    example: true
+                  payload:
+                    $ref: '#/components/schemas/User'
+
+        '401':
+          description: Token inválido o expirado
+          content:
+            application/json:
+              example:
+                status: 401
+                OK: false
+                message: "Token inválido o expirado"
+
+        '403':
+          description: Sin permisos (solo ADMIN)
+          content:
+            application/json:
+              example:
+                status: 403
+                OK: false
+                message: "No tenés permisos para acceder a este recurso"
+
+        '404':
+          description: Usuario no encontrado
+          content:
+            application/json:
+              example:
+                status: 404
+                OK: false
+                message: "Usuario no encontrado"
+
+
+    delete:
+      tags: [Users]
+      summary: Eliminar usuario por ID (solo ADMIN)
+      description: Elimina un usuario existente.  
+        Requiere autenticación con JWT y rol ADMIN.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Usuario eliminado correctamente
+          content:
+            application/json:
+              example:
+                status: 200
+                OK: true
+                message: "Usuario ID -> 12cc244f-a6e8-4c1d-b56b-588cf6b6e273 eliminado de la base de datos"
+                payload:
+                  id: "12cc244f-a6e8-4c1d-b56b-588cf6b6e273"
+                  nombre: "Pruebas"
+                  apellido: "Pruebas"
+                  email: "PRUEBAS@gmail.com"
+                  role: "USER"
+
+        '400':
+          description: Usuario no encontrado
+          content:
+            application/json:
+              example:
+                status: 400
+                OK: false
+                message: "Usuario no encontrado"
+
+        '401':
+          description: Token inválido o expirado
+          content:
+            application/json:
+              example:
+                status: 401
+                OK: false
+                message: "Token inválido o expirado"
+
+        '403':
+          description: Sin permisos (solo ADMIN)
+          content:
+            application/json:
+              example:
+                status: 403
+                OK: false
+                message: "No tenés permisos para acceder a este recurso"
+
+
+    patch:
+      tags: [Users]
+      summary: Actualizar usuario (solo ADMIN)
+      description: Actualiza parcialmente un usuario.  
+        Requiere autenticación con JWT y rol ADMIN.  
+        Devuelve los datos anteriores y los nuevos.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdate'
+            example:
+              role: "ADMIN"
+      responses:
+        '200':
+          description: Usuario actualizado correctamente
+          content:
+            application/json:
+              examples:
+                cambio_role:
+                  summary: Cambio de role USER → ADMIN
+                  value:
+                    status: 200
+                    OK: true
+                    oldDataUser:
+                      id: "4d11cd26-b4ff-42f0-81ee-06fb51f1d32f"
+                      nombre: "Test"
+                      apellido: "Test"
+                      email: "TEST@gmail.com"
+                      role: "USER"
+                    newDataUser:
+                      id: "4d11cd26-b4ff-42f0-81ee-06fb51f1d32f"
+                      nombre: "Test"
+                      apellido: "Test"
+                      email: "TEST@gmail.com"
+                      role: "ADMIN"
+                cambio_datos:
+                  summary: Cambio de datos y role
+                  value:
+                    status: 200
+                    OK: true
+                    oldDataUser:
+                      id: "4d11cd26-b4ff-42f0-81ee-06fb51f1d32f"
+                      nombre: "Test"
+                      apellido: "Test"
+                      email: "TEST@gmail.com"
+                      role: "ADMIN"
+                    newDataUser:
+                      id: "4d11cd26-b4ff-42f0-81ee-06fb51f1d32f"
+                      nombre: "Testeooo"
+                      apellido: "Test"
+                      email: "testeooo@gmail.com"
+                      role: "USER"
+
+        '401':
+          description: Token inválido o expirado
+          content:
+            application/json:
+              example:
+                status: 401
+                OK: false
+                message: "Token inválido o expirado"
+
+        '403':
+          description: Sin permisos (solo ADMIN)
+          content:
+            application/json:
+              example:
+                status: 403
+                OK: false
+                message: "No tenés permisos para acceder a este recurso"
+
+        '404':
+          description: Usuario no encontrado
+          content:
+            application/json:
+              example:
+                status: 404
+                OK: false
+                message: "Usuario no encontrado"
+
+
+  /api/user/create:
+    post:
+      tags: [Users]
+      summary: Registrar nuevo usuario
+      description: Endpoint público para que un usuario se registre en el sistema.
+      security: []   # público, sin JWT
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+            example:
+              nombre: "Usuariotest"
+              apellido: "Usuariotest"
+              fecha_nacimiento: "1999-06-26"
+              password: "usuariotest"
+              email: "usuariotest@gmail.com"
+      responses:
+        '200':
+          description: Usuario creado correctamente
+          content:
+            application/json:
+              example:
+                status: 200
+                OK: true
+                message: "Usuario creado"
+                payload:
+                  id: "cd276294-8875-4ffd-9ee2-5f1e4a8c53e4"
+                  nombre: "Usuariotest"
+                  apellido: "Usuariotest"
+                  email: "usuariotest@gmail.com"
+                  role: "USER"
+
+        '400':
+          description: Error de validación en los datos de registro
+          content:
+            application/json:
+              examples:
+                nombre_obligatorio:
+                  summary: Nombre faltante o vacío
+                  value:
+                    status: 400
+                    OK: false
+                    message: "El nombre es obligatorio y no puede estar vacío"
+
+                apellido_obligatorio:
+                  summary: Apellido faltante o vacío
+                  value:
+                    status: 400
+                    OK: false
+                    message: "El apellido es obligatorio y no puede estar vacío"
+
+                fecha_invalida:
+                  summary: Fecha de nacimiento inválida o menor de 18 años
+                  value:
+                    status: 400
+                    OK: false
+                    message: "La fecha de nacimiento es obligatoria y debe ser igual o mayor a al menos 18 años"
+
+                password_obligatoria:
+                  summary: Password faltante o vacía
+                  value:
+                    status: 400
+                    OK: false
+                    message: "La contraseña es obligatoria y no puede estar vacía"
+
+                password_corta:
+                  summary: Password con menos de 8 caracteres
+                  value:
+                    status: 400
+                    OK: false
+                    message: "La contraseña debe tener al menos 8 caracteres"
+
+                email_invalido:
+                  summary: Email faltante o con formato inválido
+                  value:
+                    status: 400
+                    OK: false
+                    message: "El email es obligatorio y debe tener un formato válido"
+
+                email_duplicado:
+                  summary: Ya existe un usuario con ese email
+                  value:
+                    status: 400
+                    OK: false
+                    message: "Ya existe un usuario registrado con ese email"
+  /api/song/songs:
+    get:
+      tags: [Songs]
+      summary: Listar todas las canciones
+      description: Devuelve el listado completo de canciones.  
+        Requiere autenticación con JWT (USER o ADMIN).
+      responses:
+        '200':
+          description: Listado de canciones
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Song'
+              example:
+                - id: "7d4fc8bb-e0bb-43e8-a47c-250ea961a65c"
+                  titulo: "Blinding Lights"
+                  artista: "The Weeknd"
+                  album: "After Hours"
+                  genero: ["Sin género"]
+                  duracion: "03:20"
+                  fechaLanzamiento: "2020-03-20"
+                  portada: "https://i.scdn.co/image/ab67616d0000b2738863bc11d2aa12b54f5aeb36"
+                - id: "b14ce3a4-291b-49e7-9c6c-0b237d4b4290"
+                  titulo: "Shape Of You"
+                  artista: "Ed Sheeran"
+                  album: "÷ (Deluxe)"
+                  genero: ["soft pop"]
+                  duracion: "03:53"
+                  fechaLanzamiento: "2017-03-03"
+                  portada: "https://i.scdn.co/image/ab67616d0000b273ba5db46f4b838ef6027e6f96"
+
+        '401':
+          description: Error de autenticación
+          content:
+            application/json:
+              examples:
+                token_invalido:
+                  summary: Token inválido o expirado
+                  value:
+                    status: 401
+                    OK: false
+                    message: "Token inválido o expirado"
+                token_faltante:
+                  summary: No se envió token
+                  value:
+                    status: 401
+                    OK: false
+                    message: "No se ha proporcionado token de autenticación"
+  /api/song/{id}:
+    get:
+      tags: [Songs]
+      summary: Obtener canción por ID
+      description: Devuelve los datos de una canción si existe.  
+        Requiere autenticación con JWT (USER o ADMIN).
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Canción encontrada
+          content:
+            application/json:
+              example:
+                status: 200
+                OK: true
+                payload:
+                  id: "aff580f1-4b42-44d5-a0be-0f7e11f585e9"
+                  titulo: "Levitating"
+                  artista: "Dua Lipa"
+                  album: "Future Nostalgia"
+                  genero: ["pop"]
+                  duracion: "03:23"
+                  fechaLanzamiento: "2020-03-27"
+                  portada: "https://i.scdn.co/image/ab67616d0000b2734bc66095f8a70bc4e6593f4f"
+
+        '404':
+          description: Canción no encontrada
+          content:
+            application/json:
+              example:
+                status: 404
+                OK: false
+                message: "Canción no encontrada"
+
+        '401':
+          description: Error de autenticación (falta token o token inválido)
+          content:
+            application/json:
+              examples:
+                token_faltante:
+                  summary: No se envió token
+                  value:
+                    status: 401
+                    OK: false
+                    message: "No se ha proporcionado token de autenticación"
+
+                token_invalido:
+                  summary: Token inválido o expirado
+                  value:
+                    status: 401
+                    OK: false
+                    message: "Token inválido o expirado"
+
+    patch:
+      tags: [Songs]
+      summary: Actualizar canción (solo ADMIN)
+      description: |
+        Actualiza parcialmente una canción existente por ID.
+        Requiere autenticación con JWT y rol ADMIN.
+        Devuelve los datos anteriores y los nuevos.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SongUpdate'
+            example:
+              album: "TEST"
+              portada: "TEST"
+      responses:
+        '200':
+          description: Canción actualizada correctamente
+          content:
+            application/json:
+              example:
+                status: 200
+                OK: true
+                oldDataSong:
+                  id: "6d9b951a-64e0-4a8d-9759-e1deef7567b9"
+                  titulo: "champion"
+                  artista: "nav"
+                  album: "RECKLESS"
+                  genero: ["melodic rap"]
+                  duracion: 195
+                  portada: "https://i.scdn.co/image/ab67616d0000b2730231368c38cf69a722ed1d0b"
+                  created_at: "2025-11-25T21:35:52.995688+00:00"
+                  fecha_lanzamiento: "2018-05-18"
+                newDataSong:
+                  id: "6d9b951a-64e0-4a8d-9759-e1deef7567b9"
+                  titulo: "champion"
+                  artista: "nav"
+                  album: "TEST"
+                  genero: ["melodic rap"]
+                  duracion: 195
+                  portada: "TEST"
+                  created_at: "2025-11-25T21:35:52.995688+00:00"
+                  fecha_lanzamiento: "2018-05-18"
+
+        '401':
+          description: Error de autenticación (falta token o token inválido)
+          content:
+            application/json:
+              examples:
+                token_faltante:
+                  summary: No se envió token
+                  value:
+                    status: 401
+                    OK: false
+                    message: "No se ha proporcionado token de autenticación"
+                token_invalido:
+                  summary: Token inválido o expirado
+                  value:
+                    status: 401
+                    OK: false
+                    message: "Token inválido o expirado"
+
+        '403':
+          description: El usuario autenticado no tiene rol ADMIN
+          content:
+            application/json:
+              example:
+                status: 403
+                OK: false
+                message: "No tenés permisos para acceder a este recurso"
+    delete:
+      tags: [Songs]
+      summary: Eliminar canción por ID (solo ADMIN)
+      description: |
+        Elimina una canción si existe.  
+        Requiere autenticación con JWT y rol ADMIN.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+
+      responses:
+        '200':
+          description: Canción eliminada correctamente
+          content:
+            application/json:
+              example:
+                status: 200
+                OK: true
+                message: "Cancion ID -> 6d9b951a-64e0-4a8d-9759-e1deef7567b9 eliminado de la base de datos"
+                playload:
+                  id: "6d9b951a-64e0-4a8d-9759-e1deef7567b9"
+                  titulo: "Champion"
+                  artista: "Nav"
+                  album: "Test"
+                  genero: ["melodic rap"]
+                  duracion: "03:15"
+                  fechaLanzamiento: "2018-05-18"
+                  portada: "TEST"
+
+        '400':
+          description: Canción no encontrada
+          content:
+            application/json:
+              example:
+                status: 400
+                OK: false
+                message: "Canción no encontrada"
+
+        '401':
+          description: Error de autenticación (falta token o token inválido)
+          content:
+            application/json:
+              examples:
+                token_faltante:
+                  summary: No se envió token
+                  value:
+                    status: 401
+                    OK: false
+                    message: "No se ha proporcionado token de autenticación"
+                token_invalido:
+                  summary: Token inválido o expirado
+                  value:
+                    status: 401
+                    OK: false
+                    message: "Token inválido o expirado"
+
+        '403':
+          description: El usuario autenticado no tiene rol ADMIN
+          content:
+            application/json:
+              example:
+                status: 403
+                OK: false
+                message: "No tenés permisos para acceder a este recurso"
+
+  /api/song/create:
+    post:
+      tags: [Songs]
+      summary: Crear canción (solo ADMIN)
+      description: |
+        Crea una canción obteniendo los datos desde Spotify a partir del título y artista.
+        Requiere autenticación con JWT y rol ADMIN.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - titulo
+                - artista
+              properties:
+                titulo:
+                  type: string
+                  example: "Champion"
+                artista:
+                  type: string
+                  example: "Nav"
+      responses:
+        '200':
+          description: Canción creada correctamente
+          content:
+            application/json:
+              example:
+                status: 200
+                OK: true
+                message: "Cancion creada"
+                payload:
+                  id: "dcced191-04b3-4ab6-8cc2-b872b3b7c3d9"
+                  titulo: "Champion"
+                  artista: "Nav"
+                  album: "Reckless"
+                  genero: ["melodic rap"]
+                  duracion: "03:15"
+                  fechaLanzamiento: "2018-05-18"
+                  portada: "https://i.scdn.co/image/ab67616d0000b2730231368c38cf69a722ed1d0b"
+
+        '403':
+          description: El usuario autenticado no tiene rol ADMIN
+          content:
+            application/json:
+              example:
+                status: 403
+                OK: false
+                message: "No tenés permisos para acceder a este recurso"
+
+        '401':
+          description: Error de autenticación (falta token o token inválido)
+          content:
+            application/json:
+              examples:
+                token_faltante:
+                  summary: No se envió token
+                  value:
+                    status: 401
+                    OK: false
+                    message: "No se ha proporcionado token de autenticación"
+
+                token_invalido:
+                  summary: Token inválido o expirado
+                  value:
+                    status: 401
+                    OK: false
+                    message: "Token inválido o expirado"
+  /api/song/play/{id}:
+    post:
+      tags: [Playback]
+      summary: Registrar reproducción de una canción
+      description: |
+        Registra una reproducción de la canción indicada para el usuario autenticado.  
+        Requiere JWT válido (USER o ADMIN).
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+
+      responses:
+        '201':
+          description: Reproducción registrada correctamente
+          content:
+            application/json:
+              example:
+                status: 201
+                OK: true
+                message: "Reproduccion registrada"
+                payload:
+                  song:
+                    id: "82ed38c6-0340-48cc-852c-bfac856e6dc0"
+                    titulo: "Numb"
+                    artista: "Linkin Park"
+                    album: "Meteora"
+                    genero: ["nu metal", "rap metal", "rock", "alternative metal"]
+                    duracion: 187
+                    portada: "https://i.scdn.co/image/ab67616d0000b2735f1f51d14e8bea89484ecd1b"
+                    created_at: "2025-11-24T03:39:11.621382+00:00"
+                    fecha_lanzamiento: "2003-03-25"
+                  log:
+                    id: "be54068d-786a-4ea4-a9ca-a4e10246e5eb"
+                    user_id: "5df97bd1-8db9-4bf3-b3ed-978b269430c8"
+                    song_id: "82ed38c6-0340-48cc-852c-bfac856e6dc0"
+                    played_at: "2025-11-25T21:46:36.025706+00:00"
+
+        '404':
+          description: Canción no encontrada
+          content:
+            application/json:
+              example:
+                status: 404
+                OK: false
+                message: "Cancion no encontrada"
+
+        '401':
+          description: Error de autenticación (falta token o token inválido)
+          content:
+            application/json:
+              examples:
+                token_faltante:
+                  summary: No se envió token
+                  value:
+                    status: 401
+                    OK: false
+                    message: "No se ha proporcionado token de autenticación"
+                token_invalido:
+                  summary: Token inválido o expirado
+                  value:
+                    status: 401
+                    OK: false
+                    message: "Token inválido o expirado"
+  /api/stats/top-songs:
+    get:
+      tags: [Stats]
+      summary: Top canciones global
+      description: Devuelve el top de canciones más reproducidas globalmente.
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            example: 3
+      responses:
+        '200':
+          description: Top canciones global
+          content:
+            application/json:
+              example:
+                status: 200
+                OK: true
+                message: "Top 3 canciones global obtenido correctamente"
+                payload:
+                  - song_id: "5374f0dd-51cf-4c47-9621-796a390bb9f7"
+                    titulo: "Take On Me"
+                    artista: "a-ha"
+                    album: "Hunting High and Low"
+                    reproducciones: 30
+                  - song_id: "aff580f1-4b42-44d5-a0be-0f7e11f585e9"
+                    titulo: "Levitating"
+                    artista: "Dua Lipa"
+                    album: "Future Nostalgia"
+                    reproducciones: 26
+                  - song_id: "d1334a20-2cc5-4341-a4b5-5d39c8ea6352"
+                    titulo: "Uptown Funk"
+                    artista: "Mark Ronson ft. Bruno Mars"
+                    album: "Uptown Special"
+                    reproducciones: 25
+        '401':
+          description: Error de autenticación
+          content:
+            application/json:
+              examples:
+                token_faltante:
+                  summary: No se envió token
+                  value:
+                    status: 401
+                    OK: false
+                    message: "No se ha proporcionado token de autenticación"
+                token_invalido:
+                  summary: Token inválido o expirado
+                  value:
+                    status: 401
+                    OK: false
+                    message: "Token inválido o expirado"
+
+  /api/stats/me/top-songs:
+    get:
+      tags: [Stats]
+      summary: Mis canciones más reproducidas
+      description: Devuelve el top de canciones más reproducidas por el usuario autenticado.
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            example: 3
+      responses:
+        '200':
+          description: Top canciones del usuario
+          content:
+            application/json:
+              example:
+                status: 200
+                OK: true
+                message: "Top 3 canciones del usuario usertest@gmail.com obtenidas correctamente"
+                payload:
+                  - song_id: "5374f0dd-51cf-4c47-9621-796a390bb9f7"
+                    titulo: "Take On Me"
+                    artista: "a-ha"
+                    album: "Hunting High and Low"
+                    reproducciones: 30
+                  - song_id: "aff580f1-4b42-44d5-a0be-0f7e11f585e9"
+                    titulo: "Levitating"
+                    artista: "Dua Lipa"
+                    album: "Future Nostalgia"
+                    reproducciones: 26
+                  - song_id: "d1334a20-2cc5-4341-a4b5-5d39c8ea6352"
+                    titulo: "Uptown Funk"
+                    artista: "Mark Ronson ft. Bruno Mars"
+                    album: "Uptown Special"
+                    reproducciones: 25
+        '401':
+          description: Error de autenticación
+          content:
+            application/json:
+              examples:
+                token_faltante:
+                  summary: No se envió token
+                  value:
+                    status: 401
+                    OK: false
+                    message: "No se ha proporcionado token de autenticación"
+                token_invalido:
+                  summary: Token inválido o expirado
+                  value:
+                    status: 401
+                    OK: false
+                    message: "Token inválido o expirado"
+
+  /api/stats/me/top-artists:
+    get:
+      tags: [Stats]
+      summary: Mis artistas más reproducidos
+      description: Devuelve el top de artistas más reproducidos por el usuario autenticado.
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            example: 3
+      responses:
+        '200':
+          description: Top artistas del usuario
+          content:
+            application/json:
+              example:
+                status: 200
+                OK: true
+                message: "Top 3 artistas del usuario obtenidos correctamente"
+                payload:
+                  - artista: "a-ha"
+                    reproducciones: 30
+                  - artista: "Dua Lipa"
+                    reproducciones: 26
+                  - artista: "Mark Ronson ft. Bruno Mars"
+                    reproducciones: 25
+        '401':
+          description: Error de autenticación
+          content:
+            application/json:
+              examples:
+                token_faltante:
+                  summary: No se envió token
+                  value:
+                    status: 401
+                    OK: false
+                    message: "No se ha proporcionado token de autenticación"
+                token_invalido:
+                  summary: Token inválido o expirado
+                  value:
+                    status: 401
+                    OK: false
+                    message: "Token inválido o expirado"
+
+  /api/stats/me/top-albums:
+    get:
+      tags: [Stats]
+      summary: Mis álbumes más reproducidos
+      description: Devuelve el top de álbumes más reproducidos por el usuario autenticado.
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            example: 3
+      responses:
+        '200':
+          description: Top álbumes del usuario
+          content:
+            application/json:
+              example:
+                status: 200
+                OK: true
+                message: "Top 3 albums del usuario obtenidos correctamente"
+                payload:
+                  - album: "Hunting High and Low"
+                    reproducciones: 30
+                  - album: "Future Nostalgia"
+                    reproducciones: 26
+                  - album: "Uptown Special"
+                    reproducciones: 25
+        '401':
+          description: Error de autenticación
+          content:
+            application/json:
+              examples:
+                token_faltante:
+                  summary: No se envió token
+                  value:
+                    status: 401
+                    OK: false
+                    message: "No se ha proporcionado token de autenticación"
+                token_invalido:
+                  summary: Token inválido o expirado
+                  value:
+                    status: 401
+                    OK: false
+                    message: "Token inválido o expirado"
+
+  /api/stats/me/top-genres:
+    get:
+      tags: [Stats]
+      summary: Mis géneros más escuchados
+      description: Devuelve el top de géneros más reproducidos por el usuario autenticado.
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            example: 3
+      responses:
+        '200':
+          description: Top géneros del usuario
+          content:
+            application/json:
+              example:
+                status: 200
+                OK: true
+                message: "Top 3 generos del usuario obtenidos correctamente"
+                payload:
+                  - genero: "rock"
+                    reproducciones: 38
+                  - genero: "new wave"
+                    reproducciones: 30
+                  - genero: "synthpop"
+                    reproducciones: 30
+        '401':
+          description: Error de autenticación
+          content:
+            application/json:
+              examples:
+                token_faltante:
+                  summary: No se envió token
+                  value:
+                    status: 401
+                    OK: false
+                    message: "No se ha proporcionado token de autenticación"
+                token_invalido:
+                  summary: Token inválido o expirado
+                  value:
+                    status: 401
+                    OK: false
+                    message: "Token inválido o expirado"
+
+  /api/stats/export:
+    get:
+      tags: [Stats]
+      summary: Exportar estadísticas a Excel
+      description: |
+        Genera un archivo Excel (.xlsx) con varias hojas de estadísticas y lo devuelve como descarga.  
+        Se recomienda probarlo con herramientas como curl o REST Client, ya que devuelve contenido binario.
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            example: 3
+      responses:
+        '200':
+          description: Archivo Excel generado correctamente
+          content:
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+              schema:
+                type: string
+                format: binary
+        '401':
+          description: Error de autenticación
+          content:
+            application/json:
+              examples:
+                token_faltante:
+                  summary: No se envió token
+                  value:
+                    status: 401
+                    OK: false
+                    message: "No se ha proporcionado token de autenticación"
+                token_invalido:
+                  summary: Token inválido o expirado
+                  value:
+                    status: 401
+                    OK: false
+                    message: "Token inválido o expirado"
+  /api/playlists:
+    get:
+      tags: [Playlists]
+      summary: Listar playlists
+      description: |
+        Devuelve las playlists visibles para el usuario autenticado.
+        - Si el usuario tiene rol USER, solo ve sus propias playlists.
+        - Si el usuario tiene rol ADMIN, puede ver todas las playlists del sistema.
+      responses:
+        '200':
+          description: Listado de playlists
+          content:
+            application/json:
+              examples:
+                user_normal:
+                  summary: Playlists de un usuario normal
+                  value:
+                    status: 200
+                    OK: true
+                    payload:
+                      - id: "6e2c4d22-194a-416c-8676-45dba656a050"
+                        nombre: "Playlist De User Test"
+                        descripcion: "Canciones De E User Test"
+                        createdAt: "2025-11-25T02:57:03.600301+00:00"
+                admin:
+                  summary: Playlists vistas por un ADMIN
+                  value:
+                    status: 200
+                    OK: true
+                    payload:
+                      - id: "6e2c4d22-194a-416c-8676-45dba656a050"
+                        nombre: "Playlist De User Test"
+                        descripcion: "Canciones De E User Test"
+                        createdAt: "2025-11-25T02:57:03.600301+00:00"
+                      - id: "e1772e5f-2c84-40c3-a903-7c71bc463c16"
+                        nombre: "Playlist De Lujan9814@Gmail.Com"
+                        descripcion: "Canciones De E Lujan9814@Gmail.Com"
+                        createdAt: "2025-11-25T02:54:48.646473+00:00"
+
+        '401':
+          description: Error de autenticación
+          content:
+            application/json:
+              examples:
+                token_faltante:
+                  summary: No se envió token
+                  value:
+                    status: 401
+                    OK: false
+                    message: "No se ha proporcionado token de autenticación"
+                token_invalido:
+                  summary: Token inválido o expirado
+                  value:
+                    status: 401
+                    OK: false
+                    message: "Token inválido o expirado"
+  /api/playlist/create:
+    post:
+      tags: [Playlists]
+      summary: Crear nueva playlist
+      description: |
+        Crea una nueva playlist asociada al usuario autenticado.
+        Requiere autenticación con JWT.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - nombre
+              properties:
+                nombre:
+                  type: string
+                  example: "Playlist de USER TEST"
+                descripcion:
+                  type: string
+                  example: "Canciones de USER TEST"
+      responses:
+        '200':
+          description: Playlist creada correctamente
+          content:
+            application/json:
+              example:
+                status: 200
+                OK: true
+                message: "Playlist creada"
+                payload:
+                  id: "96f16212-9bd9-4fca-b088-91772c7a4c5b"
+                  nombre: "Musica Para Correr 2"
+                  descripcion: "Canciones Con Ritmo 2"
+                  createdAt: "2025-11-25T23:42:09.204298+00:00"
+
+        '400':
+          description: Error de validación
+          content:
+            application/json:
+              examples:
+                nombre_requerido:
+                  summary: Falta nombre de la playlist
+                  value:
+                    status: 400
+                    OK: false
+                    message: "El nombre de la playlist es requerido"
+
+        '401':
+          description: Error de autenticación
+          content:
+            application/json:
+              examples:
+                token_faltante:
+                  summary: No se envió token
+                  value:
+                    status: 401
+                    OK: false
+                    message: "No se ha proporcionado token de autenticación"
+
+                token_invalido:
+                  summary: Token inválido o expirado
+                  value:
+                    status: 401
+                    OK: false
+                    message: "Token inválido o expirado"
+  /api/playlist/{id}:
+    get:
+      tags: [Playlists]
+      summary: Obtener playlist por ID
+      description: |
+        Devuelve una playlist por su ID.
+        - El usuario con rol USER solo puede acceder a sus propias playlists.
+        - El usuario con rol ADMIN puede acceder a playlists de cualquier usuario.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID de la playlist
+      responses:
+        '200':
+          description: Playlist encontrada
+          content:
+            application/json:
+              examples:
+                user_owner:
+                  summary: Usuario dueño de la playlist
+                  value:
+                    status: 200
+                    OK: true
+                    message: "Playlist encontrada"
+                    payload:
+                      id: "b6a4d7cd-8600-41c0-b20a-131ff733f17b"
+                      nombre: "Musica Para Correr 2"
+                      descripcion: "Canciones Con Ritmo 2"
+                      createdAt: "2025-11-25T23:43:18.178238+00:00"
+                admin_other_user:
+                  summary: ADMIN accediendo a playlist de otro usuario
+                  value:
+                    status: 200
+                    OK: true
+                    message: "Playlist encontrada"
+                    payload:
+                      id: "b6a4d7cd-8600-41c0-b20a-131ff733f17b"
+                      nombre: "Musica Para Correr 2"
+                      descripcion: "Canciones Con Ritmo 2"
+                      createdAt: "2025-11-25T23:43:18.178238+00:00"
+
+        '400':
+          description: Error al obtener la playlist (ID inválido o playlist inexistente)
+          content:
+            application/json:
+              example:
+                status: 400
+                OK: false
+                message: "Cannot coerce the result to a single JSON object"
+
+        '403':
+          description: El usuario no tiene permiso para acceder a la playlist
+          content:
+            application/json:
+              example:
+                status: 403
+                OK: false
+                message: "No tienes permiso para acceder a esta playlist"
+
+        '401':
+          description: Error de autenticación
+          content:
+            application/json:
+              examples:
+                token_faltante:
+                  summary: No se envió token
+                  value:
+                    status: 401
+                    OK: false
+                    message: "No se ha proporcionado token de autenticación"
+                token_invalido:
+                  summary: Token inválido o expirado
+                  value:
+                    status: 401
+                    OK: false
+                    message: "Token inválido o expirado"
+    patch:
+      tags: [Playlists]
+      summary: Actualizar playlist
+      description: |
+        Actualiza el nombre y/o la descripción de una playlist.
+        - El usuario con rol USER solo puede actualizar sus propias playlists.
+        - El usuario con rol ADMIN puede actualizar playlists de cualquier usuario.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID de la playlist a actualizar
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nombre:
+                  type: string
+                  example: "Musica Para Correr 20"
+                descripcion:
+                  type: string
+                  example: "Descripción super actualizada"
+      responses:
+        '200':
+          description: Playlist actualizada correctamente
+          content:
+            application/json:
+              examples:
+                user_owner:
+                  summary: Usuario actualiza su propia playlist
+                  value:
+                    status: 200
+                    OK: true
+                    message: "Playlist actualizada"
+                    payload:
+                      id: "647a676a-3f23-4283-8684-2d9ad3cb5e93"
+                      nombre: "Musica Para Correr 20"
+                      descripcion: "DescripcióN Super Actualizada"
+                      createdAt: "2025-11-25T23:43:19.647053+00:00"
+                admin_other_user:
+                  summary: ADMIN actualiza playlist de otro usuario
+                  value:
+                    status: 200
+                    OK: true
+                    message: "Playlist actualizada"
+                    payload:
+                      id: "647a676a-3f23-4283-8684-2d9ad3cb5e93"
+                      nombre: "Musica Para Correr 30"
+                      descripcion: "DescripcióN Ultra Actualizada"
+                      createdAt: "2025-11-25T23:43:19.647053+00:00"
+
+        '403':
+          description: El usuario no tiene permiso para actualizar la playlist
+          content:
+            application/json:
+              example:
+                status: 403
+                OK: false
+                message: "No tienes permiso para acceder a esta playlist"
+
+        '401':
+          description: Error de autenticación
+          content:
+            application/json:
+              examples:
+                token_faltante:
+                  summary: No se envió token
+                  value:
+                    status: 401
+                    OK: false
+                    message: "No se ha proporcionado token de autenticación"
+                token_invalido:
+                  summary: Token inválido o expirado
+                  value:
+                    status: 401
+                    OK: false
+                    message: "Token inválido o expirado"
+    delete:
+      tags: [Playlists]
+      summary: Eliminar playlist
+      description: |
+        Elimina una playlist por su ID.
+        - El usuario con rol USER solo puede eliminar sus propias playlists.
+        - El usuario con rol ADMIN puede eliminar playlists de cualquier usuario.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID de la playlist a eliminar
+      responses:
+        '200':
+          description: Playlist eliminada correctamente
+          content:
+            application/json:
+              examples:
+                user_owner:
+                  summary: Usuario elimina su propia playlist
+                  value:
+                    status: 200
+                    OK: true
+                    message: "Playlist ID -> 6e2c4d22-194a-416c-8676-45dba656a050 eliminada"
+                    payload:
+                      id: "6e2c4d22-194a-416c-8676-45dba656a050"
+                      nombre: "Playlist De User Test"
+                      descripcion: "Canciones De E User Test"
+                      createdAt: "2025-11-25T02:57:03.600301+00:00"
+                admin_other_user:
+                  summary: ADMIN elimina playlist de otro usuario
+                  value:
+                    status: 200
+                    OK: true
+                    message: "Playlist ID -> 96f16212-9bd9-4fca-b088-91772c7a4c5b eliminada"
+                    payload:
+                      id: "96f16212-9bd9-4fca-b088-91772c7a4c5b"
+                      nombre: "Musica Para Correr 2"
+                      descripcion: "Canciones Con Ritmo 2"
+                      createdAt: "2025-11-25T23:42:09.204298+00:00"
+
+        '403':
+          description: El usuario no tiene permiso para eliminar la playlist
+          content:
+            application/json:
+              example:
+                status: 403
+                OK: false
+                message: "No tienes permiso para acceder a esta playlist"
+
+        '401':
+          description: Error de autenticación
+          content:
+            application/json:
+              examples:
+                token_faltante:
+                  summary: No se envió token
+                  value:
+                    status: 401
+                    OK: false
+                    message: "No se ha proporcionado token de autenticación"
+                token_invalido:
+                  summary: Token inválido o expirado
+                  value:
+                    status: 401
+                    OK: false
+                    message: "Token inválido o expirado"
+  /api/playlist/{id}/songs:
+    get:
+      tags: [Playlists]
+      summary: Obtener canciones de una playlist
+      description: |
+        Devuelve todas las canciones pertenecientes a una playlist.
+        - Los usuarios con rol USER solo pueden ver sus propias playlists.
+        - Los usuarios con rol ADMIN pueden ver playlists de cualquier usuario.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID de la playlist
+      responses:
+        '200':
+          description: Lista de canciones obtenida correctamente
+          content:
+            application/json:
+              examples:
+                user_owner:
+                  summary: Usuario ve canciones de su playlist
+                  value:
+                    status: 200
+                    OK: true
+                    payload:
+                      id: "a1f214fd-0557-4cf2-a70d-5342e94f6af2"
+                      nombre: "Musica Para Correr"
+                      descripcion: "Canciones Con Ritmo"
+                      createdAt: "2025-11-25T23:39:04.174569+00:00"
+                      canciones:
+                        - id: "d1334a20-2cc5-4341-a4b5-5d39c8ea6352"
+                          titulo: "Uptown Funk"
+                          artista: "Mark Ronson Ft. Bruno Mars"
+                          album: "Uptown Special"
+                          genero:
+                            - "Sin género"
+                          duracion: "04:29"
+                          fechaLanzamiento: "2015-01-12"
+                          portada: "https://i.scdn.co/image/ab67616d0000b2739860171ddfee17f77a570cf6"
+                          addedAt: "2025-11-26T00:27:21.315127+00:00"
+                      totalCanciones: 1
+
+                admin_other_user:
+                  summary: ADMIN ve playlist de otro usuario
+                  value:
+                    status: 200
+                    OK: true
+                    payload:
+                      id: "a1f214fd-0557-4cf2-a70d-5342e94f6af2"
+                      nombre: "Musica Para Correr"
+                      descripcion: "Canciones Con Ritmo"
+                      createdAt: "2025-11-25T23:39:04.174569+00:00"
+                      canciones:
+                        - id: "d1334a20-2cc5-4341-a4b5-5d39c8ea6352"
+                          titulo: "Uptown Funk"
+                          artista: "Mark Ronson Ft. Bruno Mars"
+                          album: "Uptown Special"
+                          genero:
+                            - "Sin género"
+                          duracion: "04:29"
+                          fechaLanzamiento: "2015-01-12"
+                          portada: "https://i.scdn.co/image/ab67616d0000b2739860171ddfee17f77a570cf6"
+                          addedAt: "2025-11-26T00:27:21.315127+00:00"
+                      totalCanciones: 1
+
+        '403':
+          description: El usuario no tiene permiso para acceder a esta playlist
+          content:
+            application/json:
+              example:
+                status: 403
+                OK: false
+                message: "No tienes permiso para acceder a esta playlist"
+
+        '401':
+          description: Error de autenticación
+          content:
+            application/json:
+              examples:
+                token_missing:
+                  summary: No se envió token
+                  value:
+                    status: 401
+                    OK: false
+                    message: "No se ha proporcionado token de autenticación"
+                token_invalid:
+                  summary: Token inválido
+                  value:
+                    status: 401
+                    OK: false
+                    message: "Token inválido o expirado"
+    post:
+      tags: [Playlists]
+      summary: Agregar canción a una playlist
+      description: |
+        Agrega una canción a una playlist.
+        - El usuario con rol USER solo puede agregar canciones a sus propias playlists.
+        - El usuario con rol ADMIN puede agregar canciones a playlists de cualquier usuario.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID de la playlist
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - songId
+              properties:
+                songId:
+                  type: string
+                  format: uuid
+                  example: "b14ce3a4-291b-49e7-9c6c-0b237d4b4290"
+      responses:
+        '200':
+          description: Canción agregada correctamente a la playlist
+          content:
+            application/json:
+              examples:
+                user_owner:
+                  summary: Usuario agrega canción a su propia playlist
+                  value:
+                    status: 200
+                    OK: true
+                    message: "Canción agregada a la playlist"
+                admin_other_user:
+                  summary: ADMIN agrega canción a playlist de otro usuario
+                  value:
+                    status: 200
+                    OK: true
+                    message: "Canción agregada a la playlist"
+
+        '400':
+          description: Error de validación al agregar la canción
+          content:
+            application/json:
+              examples:
+                song_already_added:
+                  summary: La canción ya está en la playlist
+                  value:
+                    status: 400
+                    OK: false
+                    message: "La canción ya está en la playlist"
+
+        '403':
+          description: El usuario no tiene permiso para modificar esta playlist
+          content:
+            application/json:
+              example:
+                status: 403
+                OK: false
+                message: "No tienes permiso para acceder a esta playlist"
+
+        '401':
+          description: Error de autenticación
+          content:
+            application/json:
+              examples:
+                token_missing:
+                  summary: No se envió token
+                  value:
+                    status: 401
+                    OK: false
+                    message: "No se ha proporcionado token de autenticación"
+                token_invalid:
+                  summary: Token inválido o expirado
+                  value:
+                    status: 401
+                    OK: false
+                    message: "Token inválido o expirado"
+
+  /api/playlist/{id}/songs/{songId}:
+    delete:
+      tags: [Playlists]
+      summary: Eliminar canción de una playlist
+      description: |
+        Elimina una canción de una playlist.
+        - El usuario con rol USER solo puede modificar sus propias playlists.
+        - El usuario con rol ADMIN puede modificar playlists de cualquier usuario.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID de la playlist
+        - name: songId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID de la canción a eliminar de la playlist
+      responses:
+        '200':
+          description: Canción eliminada correctamente de la playlist
+          content:
+            application/json:
+              examples:
+                user_owner:
+                  summary: Usuario elimina canción de su propia playlist
+                  value:
+                    status: 200
+                    OK: true
+                    message: "Canción eliminada de la playlist"
+                admin_other_user:
+                  summary: ADMIN elimina canción de playlist de otro usuario
+                  value:
+                    status: 200
+                    OK: true
+                    message: "Canción eliminada de la playlist"
+
+        '404':
+          description: La canción no está en la playlist
+          content:
+            application/json:
+              example:
+                status: 404
+                OK: false
+                message: "La canción no está en la playlist"
+
+        '403':
+          description: El usuario no tiene permiso para modificar esta playlist
+          content:
+            application/json:
+              example:
+                status: 403
+                OK: false
+                message: "No tienes permiso para acceder a esta playlist"
+
+        '401':
+          description: Error de autenticación
+          content:
+            application/json:
+              examples:
+                token_missing:
+                  summary: No se envió token
+                  value:
+                    status: 401
+                    OK: false
+                    message: "No se ha proporcionado token de autenticación"
+                token_invalid:
+                  summary: Token inválido o expirado
+                  value:
+                    status: 401
+                    OK: false
+                    message: "Token inválido o expirado"

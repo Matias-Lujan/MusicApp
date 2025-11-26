@@ -82,4 +82,16 @@ export const songService = {
 
     return deletedSong;
   },
+
+  async getSongById(id) {
+    const song = await database.getById(id);
+
+    if (!song) {
+      const error = new Error('Canción no encontrada');
+      error.statusCode = 404;
+      throw error;
+    }
+
+    return song;
+  },
 };

@@ -8,8 +8,12 @@ info:
     Quedan públicos los endpoints de login (`/api/auth/login`) y registro de usuario (`/api/user/create`).
 
 servers:
+  - url: /
+    description: Servidor actual (local o producción)
+
   - url: http://127.0.0.1:3001
     description: Servidor local de desarrollo
+
 
 tags:
   - name: Auth
@@ -1414,7 +1418,7 @@ paths:
                     status: 401
                     OK: false
                     message: "Token inválido o expirado"
-  /api/playlists:
+  /api/playlist/playlists:
     get:
       tags: [Playlists]
       summary: Listar playlists

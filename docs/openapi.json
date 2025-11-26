@@ -7,6 +7,10 @@
   },
   "servers": [
     {
+      "url": "/",
+      "description": "Servidor actual (local o producción)"
+    },
+    {
       "url": "http://127.0.0.1:3001",
       "description": "Servidor local de desarrollo"
     }
@@ -2003,7 +2007,7 @@
         }
       }
     },
-    "/api/playlists": {
+    "/api/playlist/playlists": {
       "get": {
         "tags": [
           "Playlists"

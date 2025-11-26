@@ -8,7 +8,7 @@
 
 ### OBTENER TODAS LAS PLAYLISTS (USER) ----------------------------
 ###
-GET {{host_vercel}}/api/playlist/playlists
+GET {{host}}/api/playlist/playlists
 Authorization: Bearer {{admin_token}}
 
 ### CREAR NUEVA PLAYLIST (USER) ----------------------------------

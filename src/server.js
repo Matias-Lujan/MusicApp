@@ -9,7 +9,6 @@ import notFounderHandler from './middleware/notFoundHandler.js';
 import statsRouter from './routers/stats.router.js';
 import statsExportRouter from './routers/stats.export.router.js';
 
-import swaggerUi from 'swagger-ui-express';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -17,7 +16,7 @@ import { fileURLToPath } from 'node:url';
 const server = express();
 const morganFormat = morgan(':method :url :status :res[content-length] - :response-time ms');
 
-//__dirname en ES Modules
+//Resolver __dirname en ES Modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -29,8 +28,40 @@ const swaggerDocument = JSON.parse(swaggerRaw);
 server.use(express.json());
 server.use(morganFormat);
 
-//Endpoint de documentación Swagger UI
-server.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+//Endpoint que devuelve el spec en JSON
+server.get('/api/docs-json', (req, res) => {
+  res.json(swaggerDocument);
+});
+
+//Swagger UI usando CDN
+server.get('/api/docs', (req, res) => {
+  res.send(`
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>MusicApp API Docs</title>
+  <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist/swagger-ui.css" />
+</head>
+<body>
+  <div id="swagger-ui"></div>
+
+  <script src="https://unpkg.com/swagger-ui-dist/swagger-ui-bundle.js"></script>
+  <script src="https://unpkg.com/swagger-ui-dist/swagger-ui-standalone-preset.js"></script>
+  <script>
+    window.onload = () => {
+      SwaggerUIBundle({
+        url: '/api/docs-json',
+        dom_id: '#swagger-ui',
+        presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset],
+        layout: "BaseLayout",
+      });
+    };
+  </script>
+</body>
+</html>
+  `);
+});
 
 server.get('/', (req, res) => {
   res.json({

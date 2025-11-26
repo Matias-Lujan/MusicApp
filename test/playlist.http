@@ -1,14 +1,15 @@
 @host=http://127.0.0.1:3001
+@host_vercel=https://music-app-jade-tau.vercel.app/
 ### TOKEN de usuario normal (ROLE = USER)
 @jwt_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoiNWRmOTdiZDEtOGRiOS00YmYzLWIzZWQtOTc4YjI2OTQzMGM4IiwiZW1haWwiOiJ1c2VydGVzdEBnbWFpbC5jb20iLCJub21icmUiOiJVc2VydGVzdHRlc3QiLCJhcGVsbGlkbyI6IlVzZXJ0ZXN0Iiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NjQxMTUzNjksImV4cCI6MTc2NDIwMTc2OX0.7hQR6BC7yw5Rcb-83e41CeQwSXF5Q_LDmJh0GGaW1b4
 ### TOKEN de administrador (ROLE = ADMIN)
-@admin_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoiOWQ0Y2U1Y2QtNjBiZi00M2NlLTk0NTAtYzQyZWY3N2RlMjUwIiwiZW1haWwiOiJsdWphbjk4MTRAZ21haWwuY29tIiwibm9tYnJlIjoiTWF0aWFzIiwiYXBlbGxpZG8iOiJMdWphbiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc2NDExNTg0MywiZXhwIjoxNzY0MjAyMjQzfQ.fFovTwdEyiaTp_VsVbt5i4RSZDtp6IcVaCzfTPqRbew
+@admin_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoiOWQ0Y2U1Y2QtNjBiZi00M2NlLTk0NTAtYzQyZWY3N2RlMjUwIiwiZW1haWwiOiJsdWphbjk4MTRAZ21haWwuY29tIiwibm9tYnJlIjoiTWF0aWFzIiwiYXBlbGxpZG8iOiJMdWphbiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc2NDEyNTQ3OSwiZXhwIjoxNzY0MjExODc5fQ.llGW3OdzEqNIxndhcKUTQajhTR22AT4cCuP1_MPvHJo
 
 
 ### OBTENER TODAS LAS PLAYLISTS (USER) ----------------------------
 ###
-GET {{host}}/api/playlist/playlists
-Authorization: Bearer {{jwt_token}}
+GET {{host_vercel}}/api/playlist/playlists
+Authorization: Bearer {{admin_token}}
 
 ### CREAR NUEVA PLAYLIST (USER) ----------------------------------
 ###
@@ -64,7 +65,7 @@ Authorization: Bearer {{jwt_token}}
 
 ### PLAYLISTS ADMIN (PUEDE OPERAR SOBRE OTRAS) -------------------
 ### OBTENER PLAYLIST DE OTRO USUARIO (ADMIN)
-GET {{host}}/api/playlist/playlists/af33bcf1-0eb4-4675-beae-2558fe3367de
+GET {{host_vercel}}/api/playlist/c4fba339-0506-40bb-8595-67d861134b8b
 Authorization: Bearer {{admin_token}}
 
 ### ACTUALIZAR PLAYLIST DE OTRO USUARIO (ADMIN) -------------------

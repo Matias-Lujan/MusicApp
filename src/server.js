@@ -1,5 +1,6 @@
 import express from 'express';
 import morgan from 'morgan';
+import helmet from 'helmet';
 
 import songRouter from './routers/song.router.js';
 import userRouter from './routers/user.router.js';
@@ -27,6 +28,23 @@ const swaggerRaw = fs.readFileSync(swaggerPath, 'utf8');
 const swaggerDocument = JSON.parse(swaggerRaw);
 
 server.use(express.json());
+
+// Helmet base
+server.use(
+  helmet({
+    // Deshabilitar Content Security Policy para evitar problemas con Swagger UI
+    contentSecurityPolicy: false,
+    // API REST → no necesita iframes
+    frameguard: { action: 'deny' },
+
+    // Evita MIME sniffing
+    contentTypeOptions: true,
+
+    // Política de referrer estricta
+    referrerPolicy: { policy: 'no-referrer' },
+  }),
+);
+
 server.use(morganFormat);
 
 //Endpoint que devuelve el spec en JSON

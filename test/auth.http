@@ -8,7 +8,7 @@
 
 ### LOGIN ADMIN ----------------------------------
 ### 
-POST {{host_vercel}}/api/auth/login
+POST {{host}}/api/auth/login
 Content-Type: application/json
 
 {

@@ -49,7 +49,24 @@ create table public.playlist_songs (
   unique(playlist_id, song_id) -- Evita duplicados de canciones en la misma playlist
 );
 
+-- Políticas de seguridad RLS
+CREATE POLICY "Users can see own playlists or admin"
+ON playlists
+FOR SELECT
+USING (
+  user_id = auth.uid()
+  OR EXISTS (
+    SELECT 1
+    FROM users
+    WHERE id = auth.uid()
+      AND role = 'ADMIN'
+  )
+);
 
+
+
+
+-- ***** FUNCIONES DE ESTADISTICAS *****
 --Funcion para obtener Top global de reproducciones
 create or replace function top_songs_global(limit_param integer)
 returns table (

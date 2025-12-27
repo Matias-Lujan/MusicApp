@@ -12,6 +12,7 @@ import statsExportRouter from './routers/stats.export.router.js';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { apiRateLimiter, authLimiter } from './middleware/rateLimit.middleware.js';
 
 const server = express();
 const morganFormat = morgan(':method :url :status :res[content-length] - :response-time ms');
@@ -69,6 +70,9 @@ server.get('/', (req, res) => {
     status: 'Ok',
   });
 });
+
+server.use('/api/auth/login', authLimiter);
+server.use('/api', apiRateLimiter);
 
 server.use('/api/song', songRouter);
 server.use('/api/user', userRouter);

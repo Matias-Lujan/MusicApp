@@ -81,8 +81,9 @@ export const StatsExportController = {
       // devuelve el xlsx
       return res.send(buffer);
     } catch (error) {
-      return res.status(500).json({
-        status: 500,
+      const status = error.statusCode || 500;
+      return res.status(status).json({
+        status,
         OK: false,
         message: 'Error al generar el archivo XLSX',
         detail: error.message,

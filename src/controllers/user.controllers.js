@@ -8,10 +8,18 @@ export const UserController = {
   getAll: async (req, res) => {
     try {
       const users = await database.getAll();
-      res.json({ status: 200, OK: true, payload: userListResponseDTO(users) });
+      res.status(200).json({ 
+          status: 200,
+          OK: true,
+          payload: userListResponseDTO(users) 
+        });
     } catch (error) {
-      console.log('Error al obtener los usuarios', error.message);
-      res.status(500).json({ error: 'error interno del server' });
+      const status = error.statusCode || 500;
+      res.status(status).json({ 
+        status,
+        OK: false,
+        message: error.message,
+      });
     }
   },
 
@@ -21,14 +29,13 @@ export const UserController = {
     try {
       const user = await userService.getUserById(id);
 
-      return res.json({
+      return res.status(200).json({
         status: 200,
         OK: true,
         payload: userResponseDTO(user),
       });
     } catch (error) {
       const status = error.statusCode || 400;
-
       return res.status(status).json({
         status,
         OK: false,
@@ -40,14 +47,19 @@ export const UserController = {
   createUser: async (req, res) => {
     try {
       const user = await userService.createUser(req.body);
-      return res.json({
+      return res.status(200).json({
         status: 200,
         OK: true,
         message: 'Usuario creado',
         payload: userResponseDTO(user),
       });
     } catch (error) {
-      return res.status(400).json({ status: 400, OK: false, message: error.message });
+      const status = error.statusCode || 400;
+      return res.status(status).json({ 
+        status, 
+        OK: false, 
+        message: error.message 
+      });
     }
   },
 
@@ -58,14 +70,19 @@ export const UserController = {
     try {
       const data = await userService.deleteUserById(id);
 
-      return res.json({
+      return res.status(200).json({
         status: 200,
         OK: true,
         message: `Usuario ID -> ${id} eliminado de la base de datos`,
         payload: userResponseDTO(data),
       });
     } catch (error) {
-      return res.status(400).json({ status: 400, OK: false, message: error.message });
+      const status = error.statusCode || 400;
+      return res.status(status).json({ 
+        status, 
+        OK: false, 
+        message: error.message 
+      });
     }
   },
 

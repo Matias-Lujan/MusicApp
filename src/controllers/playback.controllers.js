@@ -18,7 +18,7 @@ export const PlaybackController = {
     try {
       const { message, song, log } = await playbackService.playSong({ userId, songId });
 
-      return res.json({
+      return res.status(201).json({
         status: 201,
         OK: true,
         message,

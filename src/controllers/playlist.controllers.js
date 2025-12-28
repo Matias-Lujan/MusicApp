@@ -13,7 +13,7 @@ export const PlaylistController = {
       const playlists = await playlistService.getAllPlaylists(userId, role);
 
       if (playlists.length === 0) {
-        return res.json({
+        return res.status(200).json({
           status: 200,
           OK: true,
           message:
@@ -40,42 +40,13 @@ export const PlaylistController = {
     }
   },
 
-  /* getAll: async (req, res) => {
-    try {
-      const userId = req.user.id;
-      const playlists = await playlistService.getAllPlaylistsByUser(userId);
-
-      if (playlists.length === 0) {
-        return res.json({
-          status: 200,
-          OK: true,
-          message: 'No tienes playlists creadas aún',
-          payload: [],
-        });
-      }
-      res.json({
-        status: 200,
-        OK: true,
-        payload: playlistListResponseDTO(playlists),
-      });
-    } catch (error) {
-      console.log('Error al obtener las playlists', error.message);
-      const status = error.statusCode || 500;
-      res.status(status).json({
-        status,
-        OK: false,
-        message: error.message || 'Error interno del servidor',
-      });
-    }
-  }, */
-
   getById: async (req, res) => {
     const { id } = req.params;
     const { id: userId, role } = req.user;
 
     try {
       const playlist = await playlistService.getPlaylistById(id, userId, role);
-      res.json({
+      res.status(200).json({
         status: 200,
         OK: true,
         message: 'Playlist encontrada',
@@ -102,7 +73,7 @@ export const PlaylistController = {
         descripcion,
       });
 
-      res.json({
+      res.status(200).json({
         status: 200,
         OK: true,
         message: 'Playlist creada',
@@ -125,7 +96,7 @@ export const PlaylistController = {
     try {
       const playlist = await playlistService.updatePlaylist(id, userId, role, req.body);
 
-      res.json({
+      res.status(200).json({
         status: 200,
         OK: true,
         message: 'Playlist actualizada',
@@ -148,7 +119,7 @@ export const PlaylistController = {
     try {
       const playlist = await playlistService.deletePlaylist(id, userId, role);
 
-      res.json({
+      res.status(200).json({
         status: 200,
         OK: true,
         message: `Playlist ID -> ${id} eliminada`,
@@ -172,7 +143,7 @@ export const PlaylistController = {
       const playlist = await playlistService.getPlaylistById(id, userId, role);
       const songs = await playlistService.getSongsByPlaylist(id, userId, role);
 
-      res.json({
+      res.status(200).json({
         status: 200,
         OK: true,
         payload: playlistWithSongsResponseDTO(playlist, songs),
@@ -195,7 +166,7 @@ export const PlaylistController = {
     try {
       await playlistService.addSongToPlaylist(id, songId, userId, role);
 
-      res.json({
+      res.status(200).json({
         status: 200,
         OK: true,
         message: 'Canción agregada a la playlist',
@@ -217,7 +188,7 @@ export const PlaylistController = {
     try {
       await playlistService.removeSongFromPlaylist(id, songId, userId, role);
 
-      res.json({
+      res.status(200).json({
         status: 200,
         OK: true,
         message: 'Canción eliminada de la playlist',

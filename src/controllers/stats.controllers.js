@@ -7,15 +7,16 @@ export const StatsController = {
     try {
       const data = await statsService.getTopSongsGlobal(limit);
 
-      return res.json({
+      return res.status(200).json({
         status: 200,
         OK: true,
         message: `Top ${limit} canciones global obtenido correctamente`,
         payload: data,
       });
     } catch (error) {
-      return res.status(400).json({
-        status: 400,
+      const status = error.statusCode || 400;
+      return res.status(status).json({
+        status,
         OK: false,
         message: error.message,
       });
@@ -28,15 +29,16 @@ export const StatsController = {
     try {
       const data = await statsService.getTopSongsByUser(userId, limit);
 
-      return res.json({
+      return res.status(200).json({
         status: 200,
         OK: true,
         message: `Top ${limit} canciones del usuario ${req.user.email} obtenidas correctamente`,
         payload: data,
       });
     } catch (error) {
-      return res.status(400).json({
-        status: 400,
+      const status = error.statusCode || 400;
+      return res.status(status).json({
+        status,
         OK: false,
         message: error.message,
       });
@@ -49,15 +51,16 @@ export const StatsController = {
     try {
       const data = await statsService.getTopArtistsByUser(userId, limit);
 
-      return res.json({
+      return res.status(200).json({
         status: 200,
         OK: true,
         message: `Top ${limit} artistas del usuario obtenidos correctamente`,
         payload: data,
       });
     } catch (error) {
-      return res.status(400).json({
-        status: 400,
+      const status = error.statusCode || 400;
+      return res.status(status).json({
+        status,
         OK: false,
         message: error.message,
       });
@@ -70,15 +73,16 @@ export const StatsController = {
     try {
       const data = await statsService.getTopAlbumsByUser(userId, limit);
 
-      return res.json({
+      return res.status(200).json({
         status: 200,
         OK: true,
         message: `Top ${limit} albums del usuario obtenidos correctamente`,
         payload: data,
       });
     } catch (error) {
-      return res.status(400).json({
-        status: 400,
+      const status = error.statusCode || 400;
+      return res.status(status).json({
+        status,
         OK: false,
         message: error.message,
       });
@@ -91,15 +95,16 @@ export const StatsController = {
     try {
       const data = await statsService.getTopGenresByUser(userId, limit);
 
-      return res.json({
+      return res.status(200).json({
         status: 200,
         OK: true,
         message: `Top ${limit} generos del usuario obtenidos correctamente`,
         payload: data,
       });
     } catch (error) {
-      return res.status(400).json({
-        status: 400,
+      const status = error.statusCode || 400;
+      return res.status(status).json({
+        status,
         OK: false,
         message: error.message,
       });

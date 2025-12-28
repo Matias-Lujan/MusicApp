@@ -8,10 +8,18 @@ export const SongController = {
   getAll: async (req, res) => {
     try {
       const songs = await database.getAll();
-      res.json(songListResponseDTO(songs));
+      res.status(200).json({
+        status: 200,
+        OK: true,
+        payload: songListResponseDTO(songs),
+      });
     } catch (error) {
-      console.log('Error al obtener las canciones', error.message);
-      res.status(500).json({ error: 'error interno del server' });
+      const status = error.statusCode || 500;
+      res.status(status).json({
+        status,
+        OK: false,
+        message: error.message || 'Error interno del servidor',
+      });
     }
   },
 
@@ -22,14 +30,13 @@ export const SongController = {
     try {
       const song = await songService.getSongById(id);
 
-      res.json({
+      res.status(200).json({
         status: 200,
         OK: true,
         payload: songResponseDTO(song),
       });
     } catch (error) {
       const status = error.statusCode || 400;
-
       res.status(status).json({
         status,
         OK: false,
@@ -44,7 +51,7 @@ export const SongController = {
     try {
       const song = await songService.createSong({ titulo, artista });
 
-      res.json({
+      res.status(200).json({
         status: 200,
         OK: true,
         message: 'Cancion creada',
@@ -52,8 +59,9 @@ export const SongController = {
       });
       return;
     } catch (error) {
-      res.json({
-        status: 400,
+      const status = error.statusCode || 400;
+      res.status(status).json({
+        status,
         OK: false,
         message: error.message,
       });
@@ -68,15 +76,16 @@ export const SongController = {
     try {
       const data = await await songService.deleteSongById(id);
 
-      res.json({
+      res.status(200).json({
         status: 200,
         OK: true,
         message: `Cancion ID -> ${id} eliminado de la base de datos`,
         playload: songResponseDTO(data),
       });
     } catch (error) {
-      res.json({
-        status: 400,
+      const status = error.statusCode || 400;
+      res.status(status).json({
+        status,
         OK: false,
         message: error.message,
       });

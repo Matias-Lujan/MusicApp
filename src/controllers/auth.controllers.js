@@ -3,7 +3,6 @@ import { authService } from '../services/auth.service.js';
 
 export const AuthController = {
   login: async (req, res) => {
-    console.log('LOGIN CONTROLLER EJECUTADO');
     const { email, password } = req.body;
 
     try {

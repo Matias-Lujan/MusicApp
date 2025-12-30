@@ -41,7 +41,7 @@ Ideal para explorar y probar la API sin herramientas externas.
 **Acceso:** Público
 
 **Descripción:**  
-Autentica un usuario a partir de `email` y `password`, y devuelve un token JWT.
+Autentica un usuario a partir de `email` y `password`, e inicia una sesión segura basada en JWT.
 
 **Body:**
 
@@ -58,7 +58,8 @@ Autentica un usuario a partir de `email` y `password`, y devuelve un token JWT.
 {
   "status": 200,
   "OK": true,
-  "token": "<jwt_token>",
+  "access_token": "<access_token>",
+  "refresh_token": "<refresh_token>",
   "payload": {
     "id": "...",
     "nombre": "...",
@@ -69,6 +70,41 @@ Autentica un usuario a partir de `email` y `password`, y devuelve un token JWT.
   "message": "Login exitoso"
 }
 ```
+
+---
+
+## 🔐 AUTH
+
+### POST `/api/auth/refresh`
+
+**Acceso:** Público (requiere refresh token)
+
+**Descripción:**  
+Renueva el access token utilizando un refresh token válido.
+
+**Características:**
+Aplica rotación de refresh token.
+
+El refresh token anterior queda automáticamente revocado.
+
+**Errores posibles:**
+401 → Refresh token inválido, expirado o revocado.
+
+---
+
+## 🔐 AUTH
+
+### POST `/api/auth/logout`
+
+**Acceso:** USER / ADMIN
+
+**Descripción:**  
+Cierra la sesión actual invalidando el refresh token asociado.
+
+**Resultado:**
+El refresh token queda revocado.
+
+La sesión no puede renovarse nuevamente.
 
 ---
 

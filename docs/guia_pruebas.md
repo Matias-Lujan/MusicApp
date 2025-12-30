@@ -51,16 +51,27 @@ En un entorno ya funcionando:
 }
 ```
 
-La respuesta incluye un campo:
+La respuesta incluye:
 
 ```json
-"token": "ey..."
+{
+  "access_token": "ey...",
+  "refresh_token": "ey..."
+}
 ```
 
-Guardar el token como variable en los archivos `.http`:
+Guardar el access token para llamadas a endpoints protegidos:
 
 ```http
-@jwt_token=ey...
+@access_token=ey...
+```
+
+El refresh token se utiliza exclusivamente para renovar la sesión.
+
+Y **en todos los ejemplos HTTP**, asegurar usar:
+
+```http
+Authorization: Bearer {{access_token}}
 ```
 
 ---
@@ -165,6 +176,7 @@ Repetir con distintas canciones y varias veces para generar un ranking interesan
   "descripcion": "Lista de prueba"
 }
 La respuesta devolverá el id de la playlist creada.
+
 7.2 Listar playlists del usuario
 
 Endpoint: GET /api/playlist/playlists
@@ -273,6 +285,45 @@ Luego abrir el archivo generado con Excel o similar.
 
 **Email duplicado:**
 - `POST /api/user/create` con email ya usado → 409
+
+---
+
+## 🔐 11 Pruebas de autenticación avanzada (refresh y logout)
+
+### 11.1 Renovación de access token
+
+Simular la expiración del access token y ejecutar:
+
+**Endpoint:** `POST /api/auth/refresh`
+
+Resultado esperado:
+- Se devuelve un nuevo `access_token`.
+- Se devuelve un nuevo `refresh_token`.
+- El refresh token anterior queda invalidado (rotación).
+
+---
+
+### 11.2 Logout y revocación de sesión
+
+Ejecutar:
+
+**Endpoint:** `POST /api/auth/logout`
+
+Resultado esperado:
+- El refresh token queda revocado.
+- La sesión se considera cerrada.
+
+---
+
+### 11.3 Refresh luego del logout (caso no válido)
+
+Intentar nuevamente:
+
+**Endpoint:** `POST /api/auth/refresh`
+
+Resultado esperado:
+- Error `401 Unauthorized`.
+- El refresh token ya no es válido.
 
 ---
 

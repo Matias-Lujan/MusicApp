@@ -143,7 +143,7 @@ Implementa el **patrón Factory** para la conexión a la base de datos.
 ## 🛡️ Middlewares (`/middleware`)
 
 ### `auth.middleware.js`
-- Lee el header `Authorization: Bearer <token>`.
+- Lee el header `Authorization: Bearer <access_token>`.
 - Verifica el JWT.
 - Si es válido, asigna un objeto `req.user` con los datos relevantes (id, email, nombre, role).
 - Si no, responde con **401**.
@@ -155,6 +155,11 @@ Implementa el **patrón Factory** para la conexión a la base de datos.
 ### `notFoundHandler.js`
 - Middleware final para cualquier ruta no matcheada.
 - Devuelve un **404** con un mensaje estándar.
+
+### `rateLimit.middleware.js`
+- Implementa **rate limiting** para limitar la cantidad de solicitudes.
+- Se aplica sobre endpoints sensibles y/o de forma global.
+- Ayuda a prevenir abuso de la API y ataques de fuerza bruta.
 
 ---
 

@@ -17,7 +17,11 @@ Este proyecto forma parte de un **Trabajo Práctico para la materia Taller de Pr
 
 2. **Autenticación y autorización**
    - Login con email y contraseña.
-   - Emisión de token **JWT**.
+   - Autenticación basada en **JWT** con esquema de doble token:
+     - **Access Token** de corta duración para acceder a endpoints protegidos.
+     - **Refresh Token** persistido para extender sesiones.
+   - Rotación automática de refresh tokens.
+   - Logout con revocación de sesión.
    - Middleware de autenticación (`authMiddleware`).
    - Middleware de autorización para rol `ADMIN` (`isAdmin`).
 
@@ -71,6 +75,16 @@ Este proyecto forma parte de un **Trabajo Práctico para la materia Taller de Pr
 
 ---
 
+## 🛡️ Seguridad
+
+La API incorpora medidas de seguridad adicionales alineadas a buenas prácticas actuales:
+
+- **Rate limiting** para limitar la cantidad de solicitudes y prevenir abusos.
+- **Hardening de cabeceras HTTP** mediante Helmet.
+- Manejo seguro de credenciales y tokens mediante variables de entorno.
+
+---
+
 ## 🛠️ Tecnologías utilizadas
 
 - **Node.js** + **Express**
@@ -83,6 +97,8 @@ Este proyecto forma parte de un **Trabajo Práctico para la materia Taller de Pr
 - **Biome** (formato / linting)
 - **Spotify Web API** (Client Credentials Flow)
 - **Swagger UI** (Documentacion Endpoints)
+- **express-rate-limit** (rate limiting)
+- **helmet** (seguridad HTTP)
 
 ---
 

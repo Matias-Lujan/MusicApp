@@ -42,7 +42,6 @@ Content-Type: application/json
   "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJiNGQ2YWJkZS02MmYyLTRiNWItODg5NS1kZTdjZmRmMjU4ODYiLCJpYXQiOjE3NjcwNjQ1OTksImV4cCI6MTc2NzY2OTM5OSwic3ViIjoiOWQ0Y2U1Y2QtNjBiZi00M2NlLTk0NTAtYzQyZWY3N2RlMjUwIn0.zKls4KI1IPYw7PpaGaKqG1YEe5nCwexeUv7ll88pAdw"
 }
 
-
 ### CASO NEGATIVO ----------------------------------
 ### Password incorrecta
 POST {{host}}/api/auth/login

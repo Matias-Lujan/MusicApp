@@ -1,5 +1,6 @@
 export function isAdmin(req, res, next) {
-  if (!req.user || !req.user.role) {
+  if (!req.user?.role) {
+    // !req.user || !req.user.role
     return res.status(401).json({
       status: 401,
       OK: false,

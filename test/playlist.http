@@ -1,20 +1,20 @@
 @host=http://127.0.0.1:3001
 @host_vercel=https://music-app-jade-tau.vercel.app/
 ### TOKEN de usuario normal (ROLE = USER)
-@jwt_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoiNWRmOTdiZDEtOGRiOS00YmYzLWIzZWQtOTc4YjI2OTQzMGM4IiwiZW1haWwiOiJ1c2VydGVzdEBnbWFpbC5jb20iLCJub21icmUiOiJVc2VydGVzdHRlc3QiLCJhcGVsbGlkbyI6IlVzZXJ0ZXN0Iiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NjQxMTUzNjksImV4cCI6MTc2NDIwMTc2OX0.7hQR6BC7yw5Rcb-83e41CeQwSXF5Q_LDmJh0GGaW1b4
+@jwt_accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoiNWRmOTdiZDEtOGRiOS00YmYzLWIzZWQtOTc4YjI2OTQzMGM4IiwiZW1haWwiOiJ1c2VydGVzdEBnbWFpbC5jb20iLCJub21icmUiOiJVc2VydGVzdHRlc3QiLCJhcGVsbGlkbyI6IlVzZXJ0ZXN0Iiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NjQxMTUzNjksImV4cCI6MTc2NDIwMTc2OX0.7hQR6BC7yw5Rcb-83e41CeQwSXF5Q_LDmJh0GGaW1b4
 ### TOKEN de administrador (ROLE = ADMIN)
-@admin_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoiOWQ0Y2U1Y2QtNjBiZi00M2NlLTk0NTAtYzQyZWY3N2RlMjUwIiwiZW1haWwiOiJsdWphbjk4MTRAZ21haWwuY29tIiwibm9tYnJlIjoiTWF0aWFzIiwiYXBlbGxpZG8iOiJMdWphbiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc2NjcyNDY5OSwiZXhwIjoxNzY2ODExMDk5fQ.tV6d1vt5HtfhtzpYFY0EKUUQVkK3f64p-3Lk8B0AHtc
+@admin_jwt_accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoiOWQ0Y2U1Y2QtNjBiZi00M2NlLTk0NTAtYzQyZWY3N2RlMjUwIiwiZW1haWwiOiJsdWphbjk4MTRAZ21haWwuY29tIiwibm9tYnJlIjoiTWF0aWFzIiwiYXBlbGxpZG8iOiJMdWphbiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc2NjcyNDY5OSwiZXhwIjoxNzY2ODExMDk5fQ.tV6d1vt5HtfhtzpYFY0EKUUQVkK3f64p-3Lk8B0AHtc
 
 
 ### OBTENER TODAS LAS PLAYLISTS (USER) ----------------------------
 ###
 GET {{host}}/api/playlist/playlists
-Authorization: Bearer {{admin_token}}
+Authorization: Bearer {{admin_jwt_accessToken}}
 
 ### CREAR NUEVA PLAYLIST (USER) ----------------------------------
 ###
 POST {{host}}/api/playlist/create
-Authorization: Bearer {{jwt_token}}
+Authorization: Bearer {{jwt_accessToken}}
 Content-Type: application/json
 
 {
@@ -25,12 +25,12 @@ Content-Type: application/json
 ### OBTENER PLAYLIST POR ID (USER) -------------------------------
 ###
 GET {{host}}/api/playlist/c4fba339-0506-40bb-8595-67d861134b8b
-Authorization: Bearer {{admin_token}}
+Authorization: Bearer {{admin_jwt_accessToken}}
 
 ### ACTUALIZAR PLAYLIST (USER) -----------------------------------
 ###
 PATCH {{host}}/api/playlist/10901867-e1d8-4640-9a96-5777563622be
-Authorization: Bearer {{admin_token}}
+Authorization: Bearer {{admin_jwt_accessToken}}
 Content-Type: application/json
 
 {
@@ -41,12 +41,12 @@ Content-Type: application/json
 ### OBTENER CANCIONES DE PLAYLIST (USER) -------------------------
 ###
 GET {{host}}/api/playlist/playlists/6e2c4d22-194a-416c-8676-45dba656a050/songs
-Authorization: Bearer {{jwt_token}}
+Authorization: Bearer {{jwt_accessToken}}
 
 ### AGREGAR CANCIÓN A PLAYLIST (USER) ----------------------------
 ###
 POST {{host}}/api/playlist/6e2c4d22-194a-416c-8676-45dba656a050/songs
-Authorization: Bearer {{jwt_token}}
+Authorization: Bearer {{jwt_accessToken}}
 Content-Type: application/json
 
 {
@@ -56,22 +56,22 @@ Content-Type: application/json
 ### ELIMINAR CANCIÓN DE PLAYLIST (USER) --------------------------
 ###
 DELETE {{host}}/api/playlist/playlists/b7bb39e3-bb41-4eba-9e3d-2e6e01b168e9/songs/b14ce3a4-291b-49e7-9c6c-0b237d4b4290
-Authorization: Bearer {{jwt_token}}
+Authorization: Bearer {{jwt_accessToken}}
 
 ### ELIMINAR PLAYLIST (USER) -------------------------------------
 ###
 DELETE {{host}}/api/playlist/96f16212-9bd9-4fca-b088-91772c7a4c5b
-Authorization: Bearer {{jwt_token}}
+Authorization: Bearer {{jwt_accessToken}}
 
 ### PLAYLISTS ADMIN (PUEDE OPERAR SOBRE OTRAS) -------------------
 ### OBTENER PLAYLIST DE OTRO USUARIO (ADMIN)
 GET {{host_vercel}}/api/playlist/c4fba339-0506-40bb-8595-67d861134b8b
-Authorization: Bearer {{admin_token}}
+Authorization: Bearer {{admin_jwt_accessToken}}
 
 ### ACTUALIZAR PLAYLIST DE OTRO USUARIO (ADMIN) -------------------
 ###
 PATCH {{host}}/api/playlist/playlists/af33bcf1-0eb4-4675-beae-2558fe3367de
-Authorization: Bearer {{admin_token}}
+Authorization: Bearer {{admin_jwt_accessToken}}
 Content-Type: application/json
 
 {
@@ -81,12 +81,12 @@ Content-Type: application/json
 ### OBTENER CANCIONES DE PLAYLIST DE OTRO USUARIO (ADMIN) -------------------
 ###
 GET {{host}}/api/playlist/c4fba339-0506-40bb-8595-67d861134b8b/songs
-Authorization: Bearer {{jwt_token}}
+Authorization: Bearer {{jwt_accessToken}}
 
 ### AGREGAR CANCIÓN A PLAYLIST DE OTRO USUARIO (ADMIN) -------------------
 ###
 POST {{host}}/api/playlist/c4fba339-0506-40bb-8595-67d861134b8b/songs
-Authorization: Bearer {{jwt_token}}
+Authorization: Bearer {{jwt_accessToken}}
 Content-Type: application/json
 
 {
@@ -97,23 +97,23 @@ Content-Type: application/json
 ### ELIMINAR CANCIÓN DE PLAYLIST DE OTRO USUARIO (ADMIN) -------------------
 ###
 DELETE {{host}}/api/playlist/e1772e5f-2c84-40c3-a903-7c71bc463c16/songs/b14ce3a4-291b-49e7-9c6c-0b237d4b4290
-Authorization: Bearer {{jwt_token}}
+Authorization: Bearer {{jwt_accessToken}}
 
 ### ELIMINAR PLAYLIST DE OTRO USUARIO (ADMIN) -------------------
 ###
 DELETE {{host}}/api/playlist/playlists/af33bcf1-0eb4-4675-beae-2558fe3367de
-Authorization: Bearer {{admin_token}}
+Authorization: Bearer {{admin_jwt_accessToken}}
 
 
 
 ### CASOS NEGATIVOS (USUARIO SIN PERMISOS) -----------------------
 ### USER intenta ver playlist de otro usuario
 GET {{host}}/api/playlist/playlists/6e2c4d22-194a-416c-8676-45dba656a050
-Authorization: Bearer {{jwt_token}}
+Authorization: Bearer {{jwt_accessToken}}
 
 ### USER intenta agregar canción en playlist de otro usuario
 POST {{host}}/api/playlist/playlists/6e2c4d22-194a-416c-8676-45dba656a050/songs
-Authorization: Bearer {{jwt_token}}
+Authorization: Bearer {{jwt_accessToken}}
 Content-Type: application/json
 
 {

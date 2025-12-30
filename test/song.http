@@ -1,23 +1,23 @@
 @host=http://127.0.0.1:3001
 ### TOKEN de usuario normal (ROLE = USER)
-@jwt_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoiNWRmOTdiZDEtOGRiOS00YmYzLWIzZWQtOTc4YjI2OTQzMGM4IiwiZW1haWwiOiJ1c2VydGVzdEBnbWFpbC5jb20iLCJub21icmUiOiJVc2VydGVzdHRlc3QiLCJhcGVsbGlkbyI6IlVzZXJ0ZXN0Iiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NjQwOTk1ODEsImV4cCI6MTc2NDE4NTk4MX0.R3KfQMFqvhFTAVABDEweqgemUiYCpfeDB3itcfhAxG4
+@jwt_accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoiNWRmOTdiZDEtOGRiOS00YmYzLWIzZWQtOTc4YjI2OTQzMGM4IiwiZW1haWwiOiJ1c2VydGVzdEBnbWFpbC5jb20iLCJub21icmUiOiJVc2VydGVzdHRlc3QiLCJhcGVsbGlkbyI6IlVzZXJ0ZXN0Iiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NjQwOTk1ODEsImV4cCI6MTc2NDE4NTk4MX0.R3KfQMFqvhFTAVABDEweqgemUiYCpfeDB3itcfhAxG4
 ### TOKEN de administrador (ROLE = ADMIN)
-@admin_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoiOWQ0Y2U1Y2QtNjBiZi00M2NlLTk0NTAtYzQyZWY3N2RlMjUwIiwiZW1haWwiOiJsdWphbjk4MTRAZ21haWwuY29tIiwibm9tYnJlIjoiTWF0aWFzIiwiYXBlbGxpZG8iOiJMdWphbiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc2NDA5OTI5NiwiZXhwIjoxNzY0MTg1Njk2fQ.LMvbeQXZrJusNF4nMmsBARAycmVVqyc9HugXuaP1vw0
+@admin_jwt_accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoiOWQ0Y2U1Y2QtNjBiZi00M2NlLTk0NTAtYzQyZWY3N2RlMjUwIiwiZW1haWwiOiJsdWphbjk4MTRAZ21haWwuY29tIiwibm9tYnJlIjoiTWF0aWFzIiwiYXBlbGxpZG8iOiJMdWphbiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc2NDA5OTI5NiwiZXhwIjoxNzY0MTg1Njk2fQ.LMvbeQXZrJusNF4nMmsBARAycmVVqyc9HugXuaP1vw0
 
 
 ### OBTENER TODAS LAS CANCIONES ----------------------------------
 ###
 GET {{host}}/api/song/songs
-Authorization: Bearer {{admin_token}}
+Authorization: Bearer {{admin_jwt_accessToken}}
 
 ### OBTENER UNA CANCIÓN POR ID ----------------------------------
 GET {{host}}/api/song/aff580f1-4b42-44d5-a0be-0f7e11f585e9
-Authorization: Bearer {{jwt_token}}
+Authorization: Bearer {{jwt_accessToken}}
 
 ### CREAR CANCIÓN ADMIN ----------------------------------
 ###
 POST {{host}}/api/song/create
-Authorization: Bearer {{admin_token}}
+Authorization: Bearer {{admin_jwt_accessToken}}
 Content-Type: application/json
 
 {
@@ -28,7 +28,7 @@ Content-Type: application/json
 ### ACTUALIZAR CANCIÓN ADMIN ----------------------------------
 ### 
 PATCH {{host}}/api/song/6d9b951a-64e0-4a8d-9759-e1deef7567b9
-Authorization: Bearer {{admin_token}}
+Authorization: Bearer {{admin_jwt_accessToken}}
 Content-Type: application/json
 
 {
@@ -38,9 +38,9 @@ Content-Type: application/json
 
 ### ELIMINAR CANCIÓN ADMIN ----------------------------------
 DELETE {{host}}/api/song/6d9b951a-64e0-4a8d-9759-e1deef7567b9
-Authorization: Bearer {{admin_token}}
+Authorization: Bearer {{admin_jwt_accessToken}}
 
 ### CASO NEGATIVO ----------------------------------
 ### obtener canción que no existe
 GET {{host}}/api/song/11111111-2222-3333-4444-555555555555
-Authorization: Bearer {{jwt_token}}
+Authorization: Bearer {{jwt_accessToken}}

@@ -15,6 +15,7 @@ export default class DatabaseFactory {
         throw new Error('Conexion MongoDB no implementada todavía');
 
       case 'supabase':
+        console.log('Conectando a Supabase...');
         return SupaBaseConnection.connect();
 
       default:

@@ -4,6 +4,7 @@ import SongRepositorySupabase from './song.supabase.repository.js';
 import UserRepositorySupabase from './user.supabase.repository.js';
 import PlaybackRepositorySupabase from './playback.supabase.repository.js';
 import PlaylistRepositorySupabase from './playlist.supabase.repository.js';
+import RefreshTokenRepositorySupabase from './refreshToken.supabase.repository.js';
 // import SongRepositoryMongoose from './song.mongo.repository.js';
 // import UserRepositoryMongoose from './user.mongo.repository.js';
 
@@ -66,6 +67,21 @@ export class RepositoryFactory {
 
       // case 'mongoose':
       //   return new PlaylistRepositoryMongoose();
+
+      default:
+        throw new Error(`Tipo de base de datos no soportado para playlists: ${databaseType}`);
+    }
+  }
+
+  static getRefreshTokenRepository() {
+    const databaseType = this.#getDatabaseType();
+
+    switch (databaseType) {
+      case 'supabase':
+        return new RefreshTokenRepositorySupabase();
+
+      // case 'mongoose':
+      //   return new RefreshTokenRepositoryMongoose();
 
       default:
         throw new Error(`Tipo de base de datos no soportado para playlists: ${databaseType}`);

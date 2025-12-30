@@ -4,7 +4,7 @@ import { config } from '../config/config.js';
 export function authMiddleware(req, res, next) {
   const authHeader = req.headers.authorization; //header Authorization: Bearer <token>
 
-  if (!authHeader) {
+  if (!authHeader?.startsWith('Bearer ')) {
     res.status(401).json({
       status: 401,
       OK: false,
@@ -16,13 +16,10 @@ export function authMiddleware(req, res, next) {
   const token = authHeader.split(' ')[1];
 
   try {
-    const decoded = jwt.verify(token, config.JWT_SECRET_KEY);
+    const decoded = jwt.verify(token, config.JWT_ACCESS_SECRET);
 
     req.user = {
-      id: decoded.subject,
-      email: decoded.email,
-      nombre: decoded.nombre,
-      apellido: decoded.apellido,
+      id: decoded.sub,
       role: decoded.role,
     };
 

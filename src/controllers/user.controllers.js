@@ -8,14 +8,14 @@ export const UserController = {
   getAll: async (req, res) => {
     try {
       const users = await database.getAll();
-      res.status(200).json({ 
-          status: 200,
-          OK: true,
-          payload: userListResponseDTO(users) 
-        });
+      res.status(200).json({
+        status: 200,
+        OK: true,
+        payload: userListResponseDTO(users),
+      });
     } catch (error) {
       const status = error.statusCode || 500;
-      res.status(status).json({ 
+      res.status(status).json({
         status,
         OK: false,
         message: error.message,
@@ -55,10 +55,10 @@ export const UserController = {
       });
     } catch (error) {
       const status = error.statusCode || 400;
-      return res.status(status).json({ 
-        status, 
-        OK: false, 
-        message: error.message 
+      return res.status(status).json({
+        status,
+        OK: false,
+        message: error.message,
       });
     }
   },
@@ -78,10 +78,10 @@ export const UserController = {
       });
     } catch (error) {
       const status = error.statusCode || 400;
-      return res.status(status).json({ 
-        status, 
-        OK: false, 
-        message: error.message 
+      return res.status(status).json({
+        status,
+        OK: false,
+        message: error.message,
       });
     }
   },

@@ -72,6 +72,7 @@ export default class UserRepositorySupabase {
       .maybeSingle(); // devuelve 0 o 1 fila
 
     if (error) {
+      console.log('Error al buscar usuario por email:', error.message);
       throw new Error(error.message);
     }
 

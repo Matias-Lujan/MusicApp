@@ -1,27 +1,13 @@
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
 import { RepositoryFactory } from '../repository/repositoryFactory.js';
 import { isNonEmptyString, isValidEmail, normalizeEmail } from '../utils/validations.utils.js';
-import { config } from '../config/config.js';
+import { signAccessToken, signRefreshToken } from './auth.tokens.js';
 
-const database = RepositoryFactory.getUserRepository();
-
-function generateAccesToken(user) {
-  const payload = {
-    subject: user.id,
-    email: user.email,
-    nombre: user.nombre,
-    apellido: user.apellido,
-    role: user.role,
-  };
-
-  return jwt.sign(payload, config.JWT_SECRET_KEY, {
-    expiresIn: config.JWT_ACCES_EXPIRES,
-  });
-}
+const userRepository = RepositoryFactory.getUserRepository();
+const refreshTokenRepository = RepositoryFactory.getRefreshTokenRepository();
 
 export const authService = {
-  async loginUser({ email, password }) {
+  async loginUser({ email, password, meta }) {
     if (!isNonEmptyString(email) || !isNonEmptyString(password)) {
       throw new Error('El email y la contraseña son obligatorios');
     }
@@ -31,7 +17,7 @@ export const authService = {
       throw new Error('El email debe tener un formato valido');
     }
 
-    const user = await database.getByEmail(normalizedEmail);
+    const user = await userRepository.getByEmail(normalizedEmail);
 
     if (!user) throw new Error(`Usuario no encontrado con email: ${email}`);
 
@@ -41,13 +27,31 @@ export const authService = {
       throw new Error('Password invalida');
     }
 
-    const { password: _password, ...safeUser } = user;
+    const { password: _password, ...safeUser } = user; // destructuring para eliminar el password del user que se va a retornar
 
-    const token = generateAccesToken(safeUser);
+    const accessToken = signAccessToken({
+      userId: safeUser.id,
+      role: safeUser.role,
+    });
+
+    const { refreshToken, tokenHash, jti, expiresAt } = signRefreshToken({
+      userId: safeUser.id,
+    });
+
+    // Almacenar el refresh token (hash) en la base de datos
+    await refreshTokenRepository.insertRefreshToken({
+      user_id: safeUser.id,
+      token_hash: tokenHash,
+      jti,
+      expires_at: expiresAt.toISOString(),
+      user_agent: meta?.userAgent ?? null,
+      ip: meta?.ip ?? null,
+    });
 
     return {
-      user: safeUser,
-      token,
+      user: { ...safeUser },
+      accessToken,
+      refreshToken,
     };
   },
 };

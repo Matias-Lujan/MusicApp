@@ -49,19 +49,23 @@ create table public.playlist_songs (
   unique(playlist_id, song_id) -- Evita duplicados de canciones en la misma playlist
 );
 
--- Políticas de seguridad RLS
-CREATE POLICY "Users can see own playlists or admin"
-ON playlists
-FOR SELECT
-USING (
-  user_id = auth.uid()
-  OR EXISTS (
-    SELECT 1
-    FROM users
-    WHERE id = auth.uid()
-      AND role = 'ADMIN'
-  )
+-- Tabla de refresh tokens para manejo de sesiones
+create table if not exists public.refresh_tokens (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references public.users(id) on delete cascade,
+  token_hash text not null unique,
+  jti text not null unique,
+  expires_at timestamp with time zone not null,
+  revoked_at timestamp with time zone,
+  replaced_by_jti text,
+  created_at timestamp with time zone default now(),
+  user_agent text,
+  ip text
 );
+
+create index if not exists idx_refresh_tokens_user_id on public.refresh_tokens(user_id);
+create index if not exists idx_refresh_tokens_expires_at on public.refresh_tokens(expires_at);
+
 
 
 

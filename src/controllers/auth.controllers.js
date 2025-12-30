@@ -6,12 +6,18 @@ export const AuthController = {
     const { email, password } = req.body;
 
     try {
-      const { user, token } = await authService.loginUser({ email, password });
-
+      const meta = { userAgent: req.headers['user-agent'], ip: req.ip }; // Obtener metadata del request: user-agent= navegador, sistema operativo, aplicación cliente; ip= dirección IP del cliente
+      const { user, accessToken, refreshToken } = await authService.loginUser({
+        email,
+        password,
+        meta,
+      });
+      console.log(user);
       res.status(200).json({
         status: 200,
         OK: true,
-        token,
+        accessToken,
+        refreshToken,
         payload: userResponseDTO(user),
         message: 'Login exitoso',
       });

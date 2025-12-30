@@ -30,4 +30,26 @@ export const AuthController = {
       });
     }
   },
+
+  logout: async (req, res) => {
+    try {
+      const { refreshToken } = req.body;
+
+      const result = await authService.logoutUser({ refreshToken });
+
+      res.status(200).json({
+        status: 200,
+        OK: true,
+        ...result,
+        message: 'Logout exitoso',
+      });
+    } catch (error) {
+      const status = error.statusCode || 400;
+      res.status(status).json({
+        status,
+        OK: false,
+        message: error.message,
+      });
+    }
+  },
 };

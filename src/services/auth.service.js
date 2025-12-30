@@ -2,6 +2,7 @@ import bcrypt from 'bcryptjs';
 import { RepositoryFactory } from '../repository/repositoryFactory.js';
 import { isNonEmptyString, isValidEmail, normalizeEmail } from '../utils/validations.utils.js';
 import { signAccessToken, signRefreshToken } from './auth.tokens.js';
+import { sha256 } from '../utils/token.utils.js';
 
 const userRepository = RepositoryFactory.getUserRepository();
 const refreshTokenRepository = RepositoryFactory.getRefreshTokenRepository();
@@ -53,5 +54,17 @@ export const authService = {
       accessToken,
       refreshToken,
     };
+  },
+
+  async logoutUser({ refreshToken }) {
+    if (!refreshToken) {
+      throw new Error('Refresh token es obligatorio para logout');
+    }
+
+    const tokenHash = sha256(refreshToken);
+
+    await refreshTokenRepository.revokeByHash(tokenHash);
+
+    return { message: 'Sesion cerrada' };
   },
 };

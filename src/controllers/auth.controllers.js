@@ -52,4 +52,31 @@ export const AuthController = {
       });
     }
   },
+
+  refreshToken: async (req, res) => {
+    try {
+      const { refreshToken } = req.body;
+
+      const meta = {
+        userAgent: req.headers['user-agent'],
+        ip: req.ip,
+      };
+
+      const result = await authService.refreshSesion({ refreshToken, meta });
+
+      res.status(200).json({
+        status: 200,
+        OK: true,
+        ...result,
+        message: 'Tokens renovados exitosamente',
+      });
+    } catch (error) {
+      const status = error.statusCode || 401;
+      res.status(status).json({
+        status,
+        OK: false,
+        message: error.message,
+      });
+    }
+  },
 };

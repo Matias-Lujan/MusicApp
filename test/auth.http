@@ -1,7 +1,7 @@
 @host=http://127.0.0.1:3001
 @host_vercel=https://music-app-jade-tau.vercel.app/
-@jwt_accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NjcwNjE5NjMsImV4cCI6MTc2NzA2Mjg2Mywic3ViIjoiOWQ0Y2U1Y2QtNjBiZi00M2NlLTk0NTAtYzQyZWY3N2RlMjUwIn0.6cMy1owy0wVDRsR0v2iIoa6hDJKaXXL0NIwUwtn3dRQ
-@jwt_refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMzgzNmJjMy1iYzA1LTQ3MzQtODRhZS1kMTA2MjYzOTQwN2EiLCJpYXQiOjE3NjcwNjE5NjMsImV4cCI6MTc2NzY2Njc2Mywic3ViIjoiOWQ0Y2U1Y2QtNjBiZi00M2NlLTk0NTAtYzQyZWY3N2RlMjUwIn0.jV1jJIH7DVuQeGTgeHQp7S3OQfCUi9CQJCw6Z8hSExU
+@jwt_accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NjcwNjQ1OTksImV4cCI6MTc2NzA2NTQ5OSwic3ViIjoiOWQ0Y2U1Y2QtNjBiZi00M2NlLTk0NTAtYzQyZWY3N2RlMjUwIn0.xjO2zCtDQdzD9APMT8DW4CWju3bxfHrTHFvHPrc_FTo
+@jwt_refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJiNGQ2YWJkZS02MmYyLTRiNWItODg5NS1kZTdjZmRmMjU4ODYiLCJpYXQiOjE3NjcwNjQ1OTksImV4cCI6MTc2NzY2OTM5OSwic3ViIjoiOWQ0Y2U1Y2QtNjBiZi00M2NlLTk0NTAtYzQyZWY3N2RlMjUwIn0.zKls4KI1IPYw7PpaGaKqG1YEe5nCwexeUv7ll88pAdw
 
 
 ### LOGIN ADMIN ----------------------------------
@@ -32,6 +32,16 @@ Content-Type: application/json
 {
   "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkMzgzNmJjMy1iYzA1LTQ3MzQtODRhZS1kMTA2MjYzOTQwN2EiLCJpYXQiOjE3NjcwNjE5NjMsImV4cCI6MTc2NzY2Njc2Mywic3ViIjoiOWQ0Y2U1Y2QtNjBiZi00M2NlLTk0NTAtYzQyZWY3N2RlMjUwIn0.jV1jJIH7DVuQeGTgeHQp7S3OQfCUi9CQJCw6Z8hSExU"
 }
+
+### REFRESH TOKEN USER ----------------------------------
+###
+POST {{host}}/api/auth/refresh-token
+Content-Type: application/json
+
+{
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJiNGQ2YWJkZS02MmYyLTRiNWItODg5NS1kZTdjZmRmMjU4ODYiLCJpYXQiOjE3NjcwNjQ1OTksImV4cCI6MTc2NzY2OTM5OSwic3ViIjoiOWQ0Y2U1Y2QtNjBiZi00M2NlLTk0NTAtYzQyZWY3N2RlMjUwIn0.zKls4KI1IPYw7PpaGaKqG1YEe5nCwexeUv7ll88pAdw"
+}
+
 
 ### CASO NEGATIVO ----------------------------------
 ### Password incorrecta

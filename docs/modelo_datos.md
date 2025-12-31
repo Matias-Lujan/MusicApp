@@ -145,6 +145,55 @@ Si se borra una playlist o una canción, también se borran las relaciones corre
 
 ---
 
+## 🔐 Tabla `refresh_tokens`
+
+```sql
+create table if not exists public.refresh_tokens (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references public.users(id) on delete cascade,
+  token_hash text not null unique,
+  jti text not null unique,
+  expires_at timestamp with time zone not null,
+  revoked_at timestamp with time zone,
+  replaced_by_jti text,
+  created_at timestamp with time zone default now(),
+  user_agent text,
+  ip text
+);
+
+create index if not exists idx_refresh_tokens_user_id on public.refresh_tokens(user_id);
+create index if not exists idx_refresh_tokens_expires_at on public.refresh_tokens(expires_at);
+
+```
+
+**Descripción:**
+
+- `id`: Identificador único del refresh token (UUID).
+- `user_id`: referencia al usuario propietario del refresh token.
+- `token_hash`: hash del token para validación.
+- `jti`: identificador único del token JWT.
+- `expires_at`: fecha y hora de expiración del token.
+- `revoked_at`: fecha y hora en que el token fue revocado (opcional).
+- `replaced_by_jti`: JTI del token que reemplazó a este (opcional).
+- `created_at`: fecha y hora de creación del token.
+- `user_agent`: información del agente de usuario (navegador, app, etc.).
+- `ip`: dirección IP desde donde se generó el token (asociada a la sesión).
+
+**Índices:**
+
+- `idx_refresh_tokens_user_id` → Optimiza búsquedas y revocaciones por usuario (logout global).
+- `idx_refresh_tokens_expires_at` → Optimiza búsquedas y limpieza de tokens expirados.
+
+**Relación con la seguridad del sistema:**
+
+Esta tabla es utilizada por el flujo de autenticación para:
+- emitir y persistir refresh tokens en `/api/auth/login`.
+- renovar sesiones con rotación en `/api/auth/refresh`.
+- revocar la sesión actual en `/api/auth/logout`.
+- permitir la revocación de todas las sesiones de un usuario.
+
+---
+
 ## 📊 Funciones SQL (RPC) para estadísticas
 
 Todas estas funciones se definen en `sql/init_db.sql` y se consumen desde la API mediante `supabase.rpc(...)` en `stats.service.js`.
